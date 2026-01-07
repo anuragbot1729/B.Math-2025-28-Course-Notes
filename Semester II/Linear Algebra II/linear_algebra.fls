@@ -1,7 +1,7 @@
-PWD /home/anurag/Documents/Notes/Semester II/Linear Algebra II
+PWD /home/anurag/Documents/Git/B.Math-2025-28-Course-Notes/Semester II/Linear Algebra II
 INPUT /usr/share/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/anurag/Documents/Notes/Semester II/Linear Algebra II/linear_algebra.tex
+INPUT /home/anurag/Documents/Git/B.Math-2025-28-Course-Notes/Semester II/Linear Algebra II/linear_algebra.tex
 OUTPUT linear_algebra.log
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texmf-dist/tex/latex/base/article.cls
