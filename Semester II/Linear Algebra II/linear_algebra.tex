@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\title{Linear Algebra II}
+\author{
+\begin{tabular}{c}
+Anurag (\texttt{bmat2508@isibang.ac.in})\\[0.6em]
+Instructor: B.\,V.\ Rajarama Bhat
+\end{tabular}
+}
+\date{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\newcommand{\Col}{\operatorname{Col}}
+\newcommand{\Null}{\operatorname{Null}}
+\begin{document}
+\maketitle
+\section*{Class 2, January 7 2026 (Substitution)}  
+We first show what is called the \textit{Fundamental Theorem of Linear Algebra}:\\
+\begin{theorem}
+If $M\in M_n(\mathbb{R})$, then $\mathbb{R}^n=C(A)\oplus N(A^{T})$.
+\end{theorem}
+\begin{proof}
+Simple, just use the fact that for any $\mathbf{x}\in \mathbb{R}^n$, $\mathbf{x}^{T}\mathbf{x}=0 \implies \mathbf{x}=\mathbf{0}$
+\end{proof}
+Another result:
+\begin{theorem}[Fredholm Alternative] 
+    $\mathbf{a}\in C(A) \iff \mathbf{a}^{T}\mathbf{b}=0 \text{ }\forall \text{ }\mathbf{b} \in N(A^{T})$.
+\end{theorem}
+\begin{proof}
+Simple, just rewrite $\mathbf{a}$ as in the previous theorem : $\mathbf{a}=A\mathbf{y}+\mathbf{x}$ 
+\\for $\mathbf{y}\in \mathbb{R}^{n} 
+\text{ and } \mathbf{x}\in N(A^{T})$. Then this follows easily.
+The other direction is trivial.
+\end{proof}
+A good application of this is to check when a system of equations has a solution. 
+The system $A\mathbf{x}=\mathbf{b}$ has a solution iff for any $\mathbf{x}\in N(A^{T})$ we have $\mathbf{b}^{T}\mathbf{x}=0$.  
+\end{document}

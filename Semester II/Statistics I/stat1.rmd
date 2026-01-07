@@ -1,0 +1,45 @@
+---
+title: "Intro to Statistics and Computation with Data"
+author: "Anurag (bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+**Class 1, January 7, 2026**
+
+Marks breakdown for this course:
+
+- Homework: 5
+
+- Quiz: 15
+
+- Midterm: 20
+
+- Worksheet: 10
+
+- Final: 50
+
+**Basic Syntax**
+```{r}
+#Creating a list of numbers
+scores=c(21,23,34,54,12)
+scores
+mean(scores)
+x=1:100
+x[x>10|x<90]
+```
+There are many pre-installed datasets in R. 
+```{r}
+#Air quality data of New York City
+head(airquality,9)
+```
+Here's how we can plot graphs based on given data:
+```{r}
+#Scatter plot of Ozone versus Wind
+plot(airquality$Wind, airquality$Ozone,main="Ozone vs. Wind",xlab="Wind(mph)",ylab="Ozone(ppb)")
+#What happens when you try to plot the whole dataset?
+plot(airquality)
+```
+
+
+
+
+
