@@ -1,0 +1,3 @@
+When I first got into ISI, I was still unaware things like LaTeX, Git...basically everything else that a student would need to organize their workflow for better documentation. So here I am, a whole semester too late doing all that I was supposed to
+be doing from the beginning. I intend to be as regular as I can with posting my coursework(whilst also struggling to stay afloat :)). In any case, this is meant for anyone who is either in a mathematical institute like ISI and would want to know
+about our coursework, or basically anyone else who is interested. There will be courses where either I have no substantial notes to provide or no major assignments at hand which need to be shared. Here's hoping I won't leave this midway.
