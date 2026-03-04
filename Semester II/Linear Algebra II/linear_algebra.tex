@@ -1,10 +1,15 @@
 \documentclass{article}
 \usepackage{amsmath,amssymb,amsthm}
 \newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem{algorithm}{Algorithm}
 \title{Linear Algebra II}
 \author{
 \begin{tabular}{c}
-Anurag (\texttt{bmat2508@isibang.ac.in})\\[0.6em]
+Anurag (bmat2508@isibang.ac.in)\\[0.6em]
 Instructor: B.\,V.\ Rajarama Bhat
 \end{tabular}
 }
@@ -34,4 +39,526 @@ The other direction is trivial.
 \end{proof}
 A good application of this is to check when a system of equations has a solution. 
 The system $A\mathbf{x}=\mathbf{b}$ has a solution iff for any $\mathbf{x}\in N(A^{T})$ we have $\mathbf{b}^{T}\mathbf{x}=0$.  
+\section*{Class 3, January 8 2026 (Substitution)}
+Suppose we have a linear transformation $T:V \to W$ with corresponding bases 
+$B_V=\{ \textbf{v}_1,\dots,\textbf{v}_n\}$ and $B_W=\{\textbf{w}_1,\dots,\textbf{w}_m\}$. 
+Let the matrix of this transformation w.r.t to these bases be $[T]_{B_W,B_V}$. How would the transpose of this matrix look in terms of linear transformations?\\
+Let $V^{*}$ be the vector space of all linear functionals from $V$ to its underlying field $F$.
+For each $i$, let us define a linear functional as follows:
+\[
+v_i^*(\mathbf{u}) =
+\begin{cases}
+1, & \mathbf{u}=\mathbf{v}_i \\
+0, & \text{otherwise}
+\end{cases}
+\]
+Then if we have a linear functional $v^{*}$ such that $v^{*}(\mathbf{v}_i)=\lambda_i$ then for any vector $\mathbf{u}\in V$
+if $$\mathbf{u}=\sum_{k=1}^{n}\alpha_k \mathbf{v}_k$$
+then $$v^{*}(\mathbf{u})=\sum_{k=1}^{n}\alpha_k\lambda_k$$
+But we can also write this as $$\sum_{k=1}^{n}\lambda_k v^{*}_k(\mathbf{u})$$
+and thus $$v^{*}\equiv \sum_{k=1}^{n}\lambda_k v^{*}_k$$
+That the $v^{*}_i$ are linearly independent is easy to see. Thus $B_{V^{*}}=\{v^{*}_1,\dots,v^{*}_n\}$ forms a basis for $V^{*}$ and $B_{W^{*}}$(defined similarly) that of $W^{*}$.\\
+Let us define what is called the dual map in the business $T^{t}:W^{*}\to V^{*}$ as follows:
+$$(T^{t}\varphi)(\mathbf{u})=\varphi(T\mathbf{u})\text{ }\forall \text{ }\varphi\in W^{*},\mathbf{u}\in V$$
+Then we find that 
+$$(T^{t}w^{*}_i)(\mathbf{v}_j)=w^{*}_i(T(\mathbf{v}_j))=w^{*}_i(\sum_{k=1}^{m}\alpha_{kj} \mathbf{w}_k)=\alpha_{ij}$$
+Thus the $\text{ji}^{th}$ element of $[T^{t}]_{B_{V^{*}},B_{W^{*}}}$ is the $\text{ij}^{th}$ element of $[T]_{B_{W},B_{V}}$.
+\section*{Class 4, January 12 2026}
+Suggested books for this course:
+\begin{itemize}
+\item A.R Rao , P. Bhimasankaram : Linear Algebra
+\item M. Artin : Algebra
+\item Henry Hudson : Linear Algebra
+\item Horn and Johnson : Matrix Theory
+\end{itemize}
+\subsection{Permutations}
+\begin{definition}
+    Let S be a non-empty finite set. Then a permutation of S is a bijective function $\sigma:S\to S$.
+\end{definition}
+\textbf{Example:} Let $S=\{s_1,\dots,s_n\}$. Define $\sigma: S\to S$ such that:
+$$\sigma(s_i)=
+\begin{cases}
+s_{i+1}, 1\leq i\leq n-1 \\
+s_1, i=n
+\end{cases}
+$$
+This is a cyclic permutation. Similarly we can also have a permutation $\tau$ on $S$ that keeps all but two elements fixed and exchanges the remaining two. Such a permutation is called a transposition.In the following we take $S=\{1,2,\dots,n\}$ and study permutations of $S$.\\ \\
+Let $G$ be the set of all permutations of $S$. 
+\begin{theorem}[Group property of permutations]
+    Fix $n\in \mathbb{N}$ and take S and G as above. Let $\circ$ be the composition operation. Then $(G,\circ)$ has the following properties:
+    \begin{enumerate}
+    \item \textbf{Associativity:} If $\sigma_1,\sigma_2,\sigma_3 \in G$ then $$\sigma_1\circ(\sigma_2\circ \sigma_3)=(\sigma_1\circ\sigma_2)\circ\sigma_3$$
+    \item \textbf{Existence of Identity:} There exists $e\in G$ such that for every $\sigma\in G$ we have $$e\circ\sigma=\sigma\circ e=\sigma$$
+    \item \textbf{Existence of inverse:} For every $\sigma\in G$ there exists $\sigma^{-1}$ such that $$\sigma\circ\sigma^{-1}=\sigma^{-1}\circ\sigma=e$$ 
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+(1) is trivial by computation; we just look at how a given number gets shuffled. For (2), notice that the map $e:S\to S$ such that $e(i)=i\text{ }\forall\text{ }i\in S$ acts accordingly. For (3), we note that if $\sigma$ takes $i$ to $\sigma(i)$ then we just consider the permutation taking $\sigma(i)$ back to $i$.
+\end{proof}
+\subsubsection{Representing permutations}
+We could always write permutations explicitly. However, it would be difficult to do so for larger sets. A better way would be to write them in terms of cycles.
+\begin{lemma}
+Let $\sigma$ be a permutation of S. Fix $k_1\in S$. Then there exists $r\in\mathbb{N}$ such that $\sigma^{r}(k_1)=k_1$.
+\end{lemma}
+\begin{proof}
+If $\sigma(k_1)=k_1$, then we're done. Otherwise take $\sigma(k_1)=k_2$. Now we notice that $\sigma(k_2)\neq k_2$ since $\sigma$ is a bijection. Then take $\sigma(k_2)=k_3$. Again if $k_3=k_1$ then we're done. Otherwise let $\sigma(k_3)=k_4$. In this manner we see that at any stage either the $\sigma^{i}$'s are all distinct or they equal $k_1$ at some stage. Since the set is finite, this process cannot continue indefinitely and hence we must have some $r\in\mathbb{N}$ such that $$\sigma^{r}(k_1)=k_1$$
+\end{proof}
+\begin{theorem}[Disjoint cycle decomposition]
+    Let $\sigma$ be a permutation of S. Then $\sigma$ consists of disjoint cycles in a unique way. 
+\end{theorem}
+\begin{proof}
+As in the proof of the previous lemma, we look at the orbits of each element under $\sigma$. This partitions the set into cycles, and this construction is unique due to the nature in which we determine cycles. Observe that no two distinct cycles can can have a non-zero intersection; for that would imply that the cycles are the same. 
+Finally, disjoint cycles commute. To see this, observe that if $c_1,c_2$ are two disjoint cycles and if $k\in S$ is not a fixed point under $c_1$ then composing $c_1,c_2$ in either order would take $k$ to the same element of $S$. The case when $k$ is a common fixed point of $c_1$ and $c_2$ is easy to see.
+\end{proof}
+\begin{definition}[Signature of a permutation]
+    Let $n\in\mathbb{N}$ and let $\sigma$ be a permutation of $S=\{1,\dots,n\}$. Take $$\epsilon(\sigma)=(-1)^{n-p}$$
+where $p$ is the number of cycles in the disjoint cycle decomposition of $\sigma$.
+\end{definition}
+Suppose $e$ is the identity permutation of $S$. Then $\epsilon(e)=1$. If $\tau$ is a transposition then $\epsilon(\tau)=-1$.\\
+A permutation $\sigma$ is odd if $\epsilon(\sigma)=-1$, and even otherwise. A cycle is even or odd according as $n$ is odd or even.
+\begin{theorem}
+Suppose $\sigma,\tau$ are permutations of $S$. Then $$\epsilon(\sigma\circ\tau)=\epsilon(\sigma)\epsilon(\tau)$$
+\end{theorem}
+\begin{proof}
+We first show for the case when $\tau$ is a transposition. Consider the cyclic decomposition of $\sigma$
+$$\sigma=(k_{11},\dots,k_{1r_1})(k_{21},\dots,k_{2r_2})\dots(k_{p1},\dots,k_{pr_p})$$
+Suppose now that $\tau=(i,j)$ with $i\neq j$.\\
+\textbf{Case 1:} $i,j$ are in the same cycle, say the first one. Suppose $i=k_{1u}$ and $j=k_{1v}$ with $u<v$. So $$\tau\circ\sigma=(k_{11},\dots,k_{1u-1},k_{1v},\dots,k_{1v+1},\dots)(k_{1u},k_{1u+1},\dots,k_{1v-1})$$
+\textbf{Case 2:} $i,j$ are in distinct cycles. In this case, composing with $\tau$ would combine the two cycles.\\
+In either case, the number of cycles changes by exactly 1. Thus, multiplying by a transposition changes the sign of a permutation.
+With this, we use the fact that any permutation may be written as a product of transpositions, and thus our result follows.
+\end{proof}
+Thus the signature acts as a homomorphism on the symmetric group $S_K$ of a set $K$ with the operation of function composition.
+\section*{Class 5, January 14 2026}
+\textbf{Writing cycles as product of transpositions:} If we have a cycle $(k_1,\dots,k_r)$, we may write that as
+$$(k_2,k_3)\dots(k_{r-1},k_r)(k_1,k_r)$$
+and notice that this results in the same permutation. This fact was used in the previous proof.
+\begin{definition}
+    Suppose $A=[a_{ij}]_{1\leq i,j\leq n}$ is a complex matrix. Then the determinant of $A$ is defined as
+    $$\text{det}(A)=\sum_{\sigma\in S_n}\epsilon(\sigma)a_{1 \sigma(1)}\dots a_{n\sigma(n)}$$
+where $\sigma$ runs over all permutations of the set $\{1,2,\dots,n\}$.
+\end{definition}
+\section*{Class 6, January 15 2026}
+We define the Permanent of a matrix $A$ by 
+$$\text{Perm}(A)=\sum_{\sigma\in S_n}a_{1\sigma(1)}\dots a_{n\sigma(n)}$$
+Numerically, the determinant is easier to compute and geometrically it is related to volume. \\
+\textbf{Basic properties of determinants}
+\begin{enumerate}
+    \item $\text{det}(I)=1$
+    \begin{proof}
+    We generalize this to the case for any diagonal matrix. The only nonzero contribution comes from the identity permutation. So the determinant is simply the product of all diagonal entries.
+    \end{proof}
+    \item The determinant of an upper (similarly lower) triangular is the product of its diagonal entries.
+    \begin{proof}
+    We show the case when $A$ is upper triangular, the case for lower triangular is similar. As $A$ is upper triangular, $a_{ij}=0$ whenever $i>j$.
+    We can thus ignore all permutations mapping $i$ to $j$ such that $i>j$. Notice that we can only pick diagonal entries from each row: if in the $i$-th row we pick the $(i+k)$-th then in the $(i+k)$-th row we cannot pick that entry and notice that our choice gets shifted so that by the end we have to pick atleast one entry below the diagonal. Thus the only nonzero contribution comes from the diagonal terms thus our result follows.
+    \end{proof}
+    \item $\text{det}(A)=\text{det}(A^{T})$
+    \begin{proof}
+    We have $(A^{T})_{ij}=a_{ji}$. Thus
+    $$\text{det}(A^T)=\sum_{\sigma\in S_n}\epsilon(\sigma)\prod_{i=1}^{n}(A^T)_{i\sigma(i)}$$
+    $$=\sum_{\sigma \in S_n}\epsilon(\sigma)\prod_{i=1}^{n}a_{\sigma(i)i}$$
+    $$=\sum_{\sigma^{-1}\in S_n}\epsilon(\sigma^{-1})\prod_{i=1}^{n}a_{i\sigma^{-1}(i)}$$
+where the last inequality follows from the fact that since $\sigma$ and $\sigma^{-1}$ have the same sign and that both run over all permutations of $S=\{1,\dots,n\}$
+\end{proof}
+\item Multiplying a row(similarly a column) by a nonzero scalar results in the determinant being scaled by that scalar.
+\begin{proof}
+Suppose we multiply the $i$-th row by $\alpha$. Since exactly one entry from this row appears in the Leibniz expansion of the determinant, they will all be scaled by $\alpha$. Thus 
+$$\det(A^{'})=\alpha\sum_{\sigma\in S_n}\prod_{k=1}^{n}a_{k\sigma(k)}=\alpha\text{det}(A)$$
+where $A^{'}$ is the matrix $A$ with the $i$-th row scaled by $\alpha$.
+\end{proof}
+\item If we can express the $i$-th row of $A$ as the sum of $i$-th row vectors of $B$ and $C$, then 
+ $$\text{det}(A)=\text{det}(B)+\text{det}(C)$$
+ \begin{proof}
+ We can express the $i$-th row term in the Leibniz expansion as
+ $$\epsilon(\sigma)a_{1\sigma(1)}\dots (b_{i\sigma(i)}+c_{i\sigma(i)})\dots a_{n\sigma(n)}$$
+ This splits the sum as $\text{det}(B)+\text{det}(D)$.
+\end{proof}
+This shows that the determinant is linear in all of its rows(similarly columns) while keeping the other rows(similarly columns) fixed. Thus, the determinant is multilinear.
+\item Suppose $B$ is a matrix formed by interchanging distinct rows of $A$. Then 
+$$\det{(B)}=-\det{(A)}$$
+\begin{proof}
+    Suppose $B$ is formed by interchanging the $i$-th and $j$-th rows of A. Then 
+    $$\det{(B)}=\sum_{\sigma\in S_n}\epsilon(\sigma)\prod_{k=1}^{n}b_{k\sigma(k)}$$
+    $$=\sum_{\theta\in S_n}\epsilon(\tau\theta)\prod_{k=1}^{n}a_{k\sigma(k)}$$
+where $\tau$ is the transposition swapping the $i$-th and $j$-th rows. Now since $\epsilon(\tau\theta)=-\epsilon(\theta)$, $\det{(B)}=-\det{(A)}$.
+\end{proof}
+\end{enumerate}
+\section*{Class 6, January 19 2026}
+\subsubsection*{Permutation Matrices}
+Suppose $\sigma$ is a permutation of $\{1,2,\dots,n\}$. Then the matrix $P_{\sigma}$ is defined by
+$$(P_{\sigma})_{ij}=
+\begin{cases}
+1 \text{ if } i=\sigma(j)\\
+0 \text{ otherwise}
+\end{cases}
+$$
+In other words, $P_{\sigma}$ permutes the basis vectors. For any vector $\mathbf{x}$,
+$$P_{\sigma}\mathbf{x}=\sum_{i}P_{\sigma}x_{i}\mathbf{e}_i=\sum_{i}x_{i}e_{\sigma(i)}$$
+Thus the i-th row becomes the $\sigma(i)$-th row. We wish to compute $\det{P_{\sigma}}$.
+$$\det{P_{\sigma}}=\sum_{\tau\in S_n}\epsilon(\tau)(P_{\sigma})_{1\tau(1)}\dots(P_{\sigma})_{n\tau(n)}$$.
+But the only non zero contribution comes from the permutation $\sigma^{-1}$ as then all the resulting terms will be 1. So $\det{P_{\sigma}}=\epsilon(\sigma)$.
+From the matrix $P_{\sigma}$ you can return to the identity matrix via transpositions. Each transposition gives you a factor of $-1$. So the determinant is the number of transpositions required to reach the identity.
+\\ We have the following characterization for the determinant.
+\begin{theorem}
+    Let $f:M_{n}(\mathbb{C})\to \mathbb{C}$ be a function satisfying
+    \begin{enumerate}
+        \item $f$ is multilinear in rows.
+        \item $f(A)=0$ if two rows are equal. 
+    \end{enumerate}
+    Then $f(A)=f(I)\det{A}\text{ }\forall\text{ }A\in M_{n}(\mathbb{C})$.
+\end{theorem}
+\begin{lemma}
+    Let $f:M_{n}(\mathbb{C})\to \mathbb{C}$ be a multilinear map. Then the following two properties are equivalent:
+    \begin{enumerate}
+        \item $f(A)=0$ if any two distinct rows of $A$ are equal.
+        \item $f(\tilde{A})=-f(A)$ is $\tilde{A}$ is formed by interchanging two distinct rows of $A$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    We have already shown $(2)\implies (1)$. WLOG, we consider just the first and second rows. Let rows of $A$ be $\mathbf{r_1},\dots,\mathbf{r_n}$
+    We consider the matrix $B$ with all but the first two rows same as that of $A$ and the first two rows being $\mathbf{r_1}+\mathbf{r_2}$.
+    Then 
+    $$f(B)=f(A)+f(\tilde{A})=0$$
+    where $\tilde{A}$ is the matrix formed by interchanging the first and second rows of $A$. So $(1)\implies (2)$.
+\end{proof}
+\begin{proof}[proof(Theorem 6).] From the previous lemma, we know that (2) implies that $f$ is alternating. 
+    Let $\mathbf{e^{T}_1},\dots,\mathbf{e^{T}_n}$ be the standard basis vectors for $\mathbb{C}^n$ considered as rows. Then we can express the i-th row as
+    $$(a_{i1},a_{i2},\dots,a_{in})=\sum_{j=1}^{n}a_{ij}\mathbf{e^{T}_j}$$
+    Then upon expanding $f(A)$ along the first row we get
+    $$f(A)=\sum_{i=1}^{n}a_{1j}f(A_{\mathbf{e^{T}_i}})$$
+
+    where $A_{\mathbf{e^{T}_i}}$ is the matrix $A$ with the first row replaced by $\mathbf{e^{T}_i}$
+Repeating the same step for all the rows results in the following expression
+$$f(A)=\sum_{j_1\neq j_2\neq\dots \neq j_n\in \{1,\dots,n\}}a_{1j_1}\dots a_{nj_n}f(P)$$
+Where $P$ is the permutation matrix with $\mathbf{e^T_{j_k}}$ in the k-th row. Note that we may safely discard terms that contain two same rows as $f$ vanishes on those matrices. By alternating nature of $f$ we may apply as many transpositions needed to get $P$ to the identity in each term. The resulting factor is just the sign of this permutation.
+So,
+$$f(A)=f(I)\sum_{\sigma\in S_n}\epsilon(\sigma)a_{1\sigma(1)}\dots a_{n\sigma(n)}=f(I)\det{A}$$
+\end{proof}
+\textbf{Remark:} Instead of rows, we could also change the statements to equivalent ones regarding columns. \\
+\subsubsection*{Laplace Expansion of a Determinant}
+This method allows us to expand the determinant along any given row(and similarly column).
+For any $i,j\in\{1,2,\dots,n\}$, let $A(i,j)$ denote the matrix formed by dropping the i-th row and the j-th column from $A$. 
+\begin{theorem}
+    For any $A\in M_{n}(\mathbb{C})$, 
+    $$\det{A}=\sum_{i=1}^{n}(-1)^{i+1}a_{ai}\det{A(i,1)}\text{ (Expansion along the first column)}$$ 
+Similar result holds for expansion along any other column(or row).
+\end{theorem}
+\begin{proof}
+    Define $f:M_n(\mathbb{C})\to\mathbb{C}$ by 
+    $$f(A)=\sum_{i=1}^{n}(-1)^{i+1}a_{i1}\det{A(i,1)}$$
+\textbf{Claim: }$A$ is multilinear in rows.
+\begin{proof}
+    For simplicity, we can just check for multilinearity in the first row. Clearly, we have so due to either the term $a_{i1}$ or $\det{A(i,1)}$. As for the second condition, if any two rows other than the first one are equal, then we're done. Otherwise, assume that the first and second rows are the same. Then 
+    $$f(A)=a_{11}\det{A(1,1)}-a_{21}\det{A(2,1)}+a_{31}\det{A(3,1)}-\dots+(-1)^{n+1}\det{A(n,1)}=0$$
+    which we get by clubbing like terms of opposite signs together.
+    \renewcommand{\qedsymbol}{}
+\end{proof}
+Now we just need to find $f(I)$. But $f(I)=1$, since only nonzero contributions come from diagonal terms and then the minors of the form $A(k,k)$ are just identity matrices of order $n-1$. Thus, $f(A)=\det{A}$.
+\end{proof}
+\begin{theorem}[Mulitplicative property of determinants]
+    Let $A,B\in M_{n}(\mathbb{C})$. Then 
+    $$\det{AB}=\det{A}\det{B}$$
+\end{theorem}
+\begin{proof}
+    Fix $A\in M_n(\mathbb{C})$, and consider $$f:M_{n}(\mathbb{C})\to \mathbb{C}$$
+    defined by $f(X)=\det{AX}$.
+    Suppose $\mathbf{x_1},\dots,\mathbf{x_n}$ be columns of $X$. Then the i-th column of $AX$ is given by
+    $$\sum_{j=1}^{n}\mathbf{a_{j}}(X)_{ji}$$
+    \textbf{Claim: }$f$ is multilinear in columns.\\
+    \begin{proof}
+        Suppose the i-th column of $X$ is the sum of two column vectors $\mathbf{y_i},\mathbf{z_i}$.
+        Then $$f(A)=\det{A[\mathbf{x_1}:\dots:\mathbf{y_i}+\mathbf{z_i}:\dots:\mathbf{x_n}]}$$
+        $$=\det{[A\mathbf{x_1}:\dots:A\mathbf{y_i}+A\mathbf{z_i}:\dots:A\mathbf{x_n}]}$$
+        $$=\det{AY}+\det{AZ}$$
+        where $Y$ and $Z$ is the matrix $X$ with the i-th column replaced the vectors $\mathbf{y_i}$ and $\mathbf{z_i}$ respectively.
+        Finally, if two columns of $X$ are same, then they are same in $AX$ as well, and hence $f(X)=0$.
+\renewcommand{\qedsymbol}{}
+    \end{proof}
+    With this we have
+        $$f(X)=f(I)\det{X}=\det{A}\det{X}$$
+\end{proof}
+Similarly, one can show that $\det{BA}=\det{A}\det{B}$. 
+\begin{corollary}
+ If a matrix $A$ is invertible, then $\det{A}\neq 0$.   
+\end{corollary}
+\section*{Class 8, January 22 2026}
+\subsubsection*{Recap of previous class}
+\textbf{Determinant of block upper tringular matrices:} If $P$ is a block upper triangular matrix such that $A$ is the block in the top left corner, $B$ is the block in the top right corner, $D$ be the block in the bottom right corner and the bottom left corner as the nulll matrix of appropriate size, then 
+$$\det{P}=\det{A}\det{D}$$
+\begin{theorem}
+    Let $P$ be the block matrix as described above. Then $P$ is invertible iff $A,D$ are invertible, in which case $P^{-1}$ is the matrix with $A^{-1}$ in the top left block, $-A^{-1}BD^{-1}$ in the top right block, $D^{-1}$ in the bottom right block and the bottom left block being the null matrix of appropriate size.
+\end{theorem}
+\begin{theorem}[Factorization Theorem]
+    Let $P$ be the block matrix as described above. 
+    \begin{enumerate}
+        \item If $D$ is invertible then 
+        
+    \end{enumerate} 
+    
+\end{theorem}
+\section*{Class 9, January 27 2026}
+\subsection*{Inner Product Spaces}
+We will mostly be discussing about vector spaces over real and complex fields. We have the standard inner product:
+$$
+\big{<}
+\begin{pmatrix}
+    x_1\\
+    x_2\\
+    .\\
+    .\\
+    .\\
+    x_n
+\end{pmatrix}
+\begin{pmatrix}
+    y_1\\
+    y_2\\
+    .\\
+    .\\
+    ,\\
+    y_n
+\end{pmatrix}
+\big{>}
+=\sum_{i=1}^{n}x_i y_i
+$$
+The inner product is multilinear; keeping one vector fixed, we can act lineaerly on the other.
+Notice that from the above definition, $\big{<}\mathbf{x},\mathbf{x}\big{>}=0$ iff $\mathbf{x}=\mathbf{0}$.
+We also have that $\big{<}\mathbf{x},\mathbf{y}\big{>}=\big{<}\mathbf{y},\mathbf{x}\big{>}$.\\
+However, things are a little different when we are working on complex vector spaces.
+Consider that we have the same two vectors as in the first case but now the $x_i$'s and $y_i$'s can be complex. Then 
+$$
+\big{<}
+\begin{pmatrix}
+    x_1\\
+    x_2\\
+    .\\
+    .\\
+    .\\
+    x_n
+\end{pmatrix}
+\begin{pmatrix}
+    y_1\\
+    y_2\\
+    .\\
+    .\\
+    ,\\
+    y_n
+\end{pmatrix}
+\big{>}
+=\sum_{i=1}^{n}\overline{x_i} y_i
+$$
+Now the inner product is no longer linear in the first variable; it is linear only in the second variable and anti-linear in the first variable.
+With our earlier definition for the standard inner product over real vector spaces, $\big{<}\mathbf{x},\mathbf{x}\big{>}=0$ need not imply that $\mathbf{x}=\mathbf{0}$ anymore. But with our new definition, we see that
+$$\big{<}\mathbf{x},\mathbf{x}\big{>}=\mathbf{\overline{x}^{T}}\mathbf{x}$$ 
+which does mean that it will be $0$ iff $\mathbf{x}=\mathbf{0}$.
+\begin{definition}
+    Let V be a vector space over $\mathbb{F}$ where $\mathbb{F}=\mathbb{R}\text{ or }\mathbb{C}$. Then a map $\big{<},\big{>}:V\times  V\to \mathbb{F}$ is called an inner product if the following hold:
+    \begin{enumerate}
+        \item $\big{<}\mathbf{x},a\mathbf{y}+b\mathbf{z}\big{>}=a\big{<}\mathbf{x},\mathbf{y}\big{>}+b\big{<}\mathbf{x},\mathbf{z}\big{>}$ (Linearity in the second variable)
+        \item $\big{<}\mathbf{y},\mathbf{x}\big{>}=\overline{\big{<}\mathbf{x},\mathbf{y}\big{>}}$ (Conjugate Symmetry)
+        \item $\big{<}\mathbf{x},\mathbf{x}\big{>}\geq 0$ (Non-negativity)
+        \item $\big{<}\mathbf{x},\mathbf{x}\big{>}=0$ iff $\mathbf{x}=\mathbf{0}$
+    \end{enumerate}
+    Then a vector space equipped with an inner product is called an inner product space.
+\end{definition}
+\textbf{Remark:} Any inner product is anti-linear in the first variable, as implied from the conditions given above. That is,
+$$\big{<}a\mathbf{x}+b\mathbf{y},\mathbf{z}\big{>}=\overline{a}\big{<}\mathbf{x},\mathbf{z}\big{>}+\overline{b}\big{<}\mathbf{y},\mathbf{z}\big{>}\text{ }\forall\text{ }a,b\in \mathbb{F}\text{ and }\mathbf{x},\mathbf{y},\mathbf{z}\in V$$
+\textbf{Example:} Take $V=\mathbb{R}^n$ over $\mathbb{R}$. Fix positive real numbers $c_1,c_2,\dots c_n$. Take
+$$
+\big{<}
+\begin{pmatrix}
+    x_1\\
+    x_2\\
+    .\\
+    .\\
+    .\\
+    x_n
+\end{pmatrix}
+\begin{pmatrix}
+    y_1\\
+    y_2\\
+    .\\
+    .\\
+    ,\\
+    y_n
+\end{pmatrix}
+\big{>}
+=\sum_{i=1}^{n}c_ix_i y_i
+$$
+\textbf{Example:} Fix $m,n\in\mathbb{N}$ and take $V=M_{m,n}(\mathbb{R})$. Clearly, $V$ is a vector space over $\mathbb{R}$. Define $\big{<},\big{>}:V\times V\to \mathbb{R}$ by
+$$\big{<}X,Y\big{>}=\text{trace}(X^{T}Y)$$
+If we instead had $M_{m,n}(\mathbb{C})$ as our vector space then we would have to define the inner product as 
+$$\big{<}X,Y\big{>}=\text{trace}(X^{*}Y)$$
+where $X^{*}=\overline{X}^{T}$. It is easy to see that this map preserves all the properties of an inner product.
+\begin{theorem}[Cauchy Schwarz inequality]
+    Let $(V,\big{<},\big{>})$ be an inner product space over $\mathbb{F}$ (where $\mathbb{F}=\mathbb{C} \text{ or }\mathbb{R}$). Then 
+    $$|\big{<}\mathbf{x},\mathbf{y}\big{>}|\leq ||\mathbf{x}|| ||\mathbf{y}|| \text{ }\forall \text{ }\mathbf{x},\mathbf{y}\in V$$
+    Equality holds iff $\mathbf{x}$ and $\mathbf{y}$ are linearly dependent.
+\end{theorem}
+\begin{proof}
+    If $\mathbf{x}=\mathbf{0}$, then $\big{<}\mathbf{0},\mathbf{y}\big{>}=0$. Then we are done.\\
+    Now assume that $||\mathbf{x}||\neq 0$. Take $\mathbf{z}=\mathbf{y}-\frac{\big{<}\mathbf{x},\mathbf{y}\big{>}}{\big{<}\mathbf{x},\mathbf{x}\big{>}}\mathbf{x}$. We know that $\big{<}\mathbf{z},\mathbf{z}\big{>}\geq 0$. Then this expands to
+    $$\big{<}\mathbf{z},\mathbf{z}\big{>}=\big{<}\mathbf{y}-\frac{\big{<}\mathbf{x},\mathbf{y}\big{>}}{\big{<}\mathbf{x},\mathbf{x}\big{>}}\mathbf{x},\mathbf{y}-\frac{\big{<}\mathbf{x},\mathbf{y}\big{>}}{\big{<}\mathbf{x},\mathbf{x}\big{>}}\mathbf{x}\big{>}$$
+    $$\implies\big{<}\mathbf{y},\mathbf{y}\big{>}-\frac{|\big{<}\mathbf{x},\mathbf{y}\big{>}|^2}{\big{<}\mathbf{x},\mathbf{x}\big{>}}\geq 0$$
+    $$\implies \big{<}\mathbf{y},\mathbf{y}\big{>}\big{<}\mathbf{x},\mathbf{x}\big{>}\geq |\big{<}\mathbf{x},\mathbf{y}\big{>}|^2$$
+It is easy to see that equality holds iff $\mathbf{y}=\alpha\mathbf{x}$ for some $\alpha\in\mathbb{F}$.
+\end{proof}
+
+
+\subsubsection*{Parallelogram Law}
+Let $(V,\big{<},\big{>})$ be an inner product space. Then for all $\mathbf{x},\mathbf{y}\in V$ we have
+$$||\mathbf{x}+\mathbf{y}||^2+||\mathbf{x}-\mathbf{y}||^2=2||\mathbf{x}||^2+2||\mathbf{y}||^2$$
+\begin{proof}
+    $$||\mathbf{x}+\mathbf{y}||^2=\big{<}\mathbf{x}+\mathbf{y},\mathbf{x}+\mathbf{y}\big{>}$$
+    and
+    $$||\mathbf{x}-\mathbf{y}||^2=\big{<}\mathbf{x}-\mathbf{y},\mathbf{x}-\mathbf{y}\big{>}$$
+Now just expanding the terms as per the definition would easily give us our result.
+\end{proof}
+\begin{proof}[Triangle Inequality]
+    For $\mathbf{x},\mathbf{y}\in V$, we want to show that
+    $$||\mathbf{x}+\mathbf{y}||\leq ||\mathbf{x}||+||\mathbf{y}||$$
+    Now, 
+    $$||\mathbf{x},\mathbf{y}||^2=\big{<}\mathbf{x}+\mathbf{y},\mathbf{x}+\mathbf{y}\big{>}=||\mathbf{x}||^2+||\mathbf{y}||^2+2\text{Re}(\big{<}\mathbf{x},\mathbf{y}\big{>})$$
+    Due to Cauchy-Schwarz we have that $\text{Re}(\big{<}\mathbf{x},\mathbf{y}\big{>})\leq ||x||\cdot ||y||$, from which our result follows easily.
+\end{proof}
+\section*{Class 10, February 2 2026}
+Every inner  product induces a norm. 
+\begin{theorem}[Polarization Identity]
+    $$\big{<}\mathbf{x},\mathbf{y}\big{>}=\frac{1}{4}\big{(}||\mathbf{x}+\mathbf{y}||^{2}-||\mathbf{x}-\mathbf{y}||^2\big{)}$$
+    when $\mathbb{F}=\mathbb{R}$
+\end{theorem}
+Two vectors are said to be mutually orthogonal if $\big{<}\mathbf{x},\mathbf{y}\big{>}=0$. 
+\begin{theorem}[Pythagorean Theorem for inner product spaces]
+If $\mathbf{x},\mathbf{y}\in V$ are mutually orthogonal then 
+$$||\mathbf{x}+\mathbf{y}||^2=||\mathbf{y}||^2 +||\mathbf{y}||^2$$
+\end{theorem}
+\begin{proposition}
+    Suppose $\mathbf{y_1},\mathbf{y_2},\dots,\mathbf{y_n}$ are non-zero mutually orthogonal vectors in an inner product space $(V,\big{<}.\big{>})$. Then $\mathbf{y_1},\dots,\mathbf{y_n}$ are linearly independent. So if $\text{dim}(V)=n$, then this set forms an orthogonal basis for the inner product space.
+\end{proposition}
+\begin{proof}
+    Fix any $j$. Consider that a linear combination of these vectors is $\mathbf{0}$. Then 
+    $$\big{<}\mathbf{y_j},\sum_{i=1}^n c_i\mathbf{y_i}\big{>}=0$$
+    Due to linearity in the second variable we get
+    $$\sum_{i\neq j}c_i\big{<}\mathbf{y_j},\mathbf{y_i}\big{>}+\big{<}\mathbf{y_j},c_j\mathbf{y_j}\big{>}=0$$
+    Since the vectors are mutually orthogonal, the first term is 0, and since we assumed that the $\mathbf{y_k}$'s are nonzero, then $\big{<}\mathbf{y_j},\mathbf{y_j}\big{>}=0$. This implies that $c_j$ is $0$ for all $j$.
+\end{proof}
+\begin{definition}
+    A basis $\{\mathbf{v_1},\dots,\mathbf{v_n}\}$ is said to be orthonormal if 
+    $$\big{<}\mathbf{v_i},\mathbf{v_j}\big{>}=\delta_{ij}$$
+\end{definition}
+\begin{theorem}
+    Let $(V,\big{<}.\big{>})$ be an inner product space. Let $\{\mathbf{v_1},\dots,\mathbf{v_n}\}$ be an orthonormal basis for V. Then for any $\mathbf{x}\in V$, 
+    $$\mathbf{x}=\sum_{i=1}^{n}\big{<}\mathbf{v_i},\mathbf{x}\big{>}\mathbf{v_i}$$
+\end{theorem}
+\begin{proof}
+        Very similar to the previous proof, just notice that $\big{<}\mathbf{y_j},\sum_{i=1}^{n}c_i\mathbf{y_i}\big{>}$ extracts the $j$-th coefficient from the linear combination.
+\end{proof}
+We have not, however, shown that an orthonormal basis exists. We have the following algorithm for that 
+\begin{algorithm}
+Let $(V,\big{<}.\big{>})$ be an inner product space. Suppose $\{\mathbf{u_1},\mathbf{u_2},\dots,\mathbf{u_n}\}$ is a basis for  V.
+We want to construct an orthonormal basis for V using the given basis. Take $\mathbf{y_1}=\mathbf{u_1}$.
+\\Inductively, we get $\mathbf{v_1},\mathbf{v_2},\dots,\mathbf{v_k}$ such that 
+\begin{enumerate}
+    \item They are orthonormal.
+    \item $\text{span}(\mathbf{u_1},\dots,\mathbf{u_n})=\text{span}(\mathbf{v_1},\dots,\mathbf{v_n})$
+\end{enumerate} 
+From here we can proceed as shown above. 
+\end{algorithm}
+\begin{corollary}
+    Every finite dimensional inner product space admits an orthonormal basis.
+\end{corollary}
+\subsection*{Matrices of linear transformations in orthonormal basis}
+Suppose $V,W$ are finite dimensional vector spaces with bases $\mathcal{B}=\{\mathbf{v_1},\dots,\mathbf{v_n}\}$ and $\mathcal{C}=\{\mathbf{w_1},\dots,\mathbf{w_m}\}$ respectively. Suppose $T:V\to W$ be a linear transformation. Then the matrix for $T$ with respect to $\mathcal{B}$ and $\mathcal{C}$ is denoted as ${[T]^{\mathcal{C}}_{\mathcal{B}}}$. 
+Now we consider that $V,W$ are inner product spaces and that $\mathcal{B},\mathcal{C}$ are orthonormal bases. 
+We fix $j$ and consider 
+$$T\mathbf{v_j}=\sum_{i=1}^{n}\big{<}\mathbf{w_i},T\mathbf{v_j}\big{>}\mathbf{w_i}$$ 
+From this we have
+$$T\mathbf{x}=\sum_{i=1}^{m}\sum_{j=1}^{n}\big{(}\big{<}\mathbf{w_i},T\mathbf{v_j}\big{>}\mathbf{x_j}\big{)}\mathbf{w_i}$$
+\section*{Class 11, February 5 2026}
+\subsection*{Adjoint of a linear map}
+Suppose $V,W$ are inner product spaces and $T:V\to W$ is a linear map. Consider 
+$$F:W\times V\to \mathbb{F}$$
+defined by $F(\mathbf{y},\mathbf{x})=\big{<}\mathbf{y},T\mathbf{x}\big{>}$ known as the bilinear form of  $T$ if $\mathbb{F}=\mathbb{R}$,and is called sesquilinear if $\mathbb{F}=\mathbb{C}$.
+If $\mathbb{F}=\mathbb{C}$, then it is anti-linear in the first variable.
+\begin{proposition}
+    Let $V,W$ be inner product spaces and and let $S:V\to W$ and $T:V\to W$ be linear maps.
+    \begin{enumerate}
+        \item $\big{<}\mathbf{y},T\mathbf{x}\big{>}=0\text{ }\forall \text{ }\mathbf{x}\in V\text{, }\mathbf{y}\in W$ then $T=0$.
+        \item $\big{<}\mathbf{y},T\mathbf{x}\big{>}=\big{<}\mathbf{y},T\mathbf{x}\big{>}$, then $S=T$.
+    \end{enumerate}
+\end{proposition}
+    \begin{proof}
+        For the first one, take $\mathbf{x}\in V$, since $\big{<}T\mathbf{x},T\mathbf{x}\big{>}=0$, then $T$ must be the zero map. It can be easily seen that the second one follows from the first.
+    \end{proof}
+\textbf{Question:} Suppose $T:V\to V$ be a linear map and $\big{<}\mathbf{x},T\mathbf{x}\big{>}=0$ for every $\mathbf{x}$. Does this imply that $T=0$? This is known as a quadratic form.
+\\
+\begin{definition}
+    Suppose $V,W$ are inner product spaces and $S:V\to W$ is a linear map. Then $S$ is said to be an isometry if 
+    $$||S\mathbf{x}||=||\mathbf{x}||\text{ }\forall \text{ }\mathbf{x}\in V$$
+\end{definition}
+\textbf{Example:} $V=W=\mathbb{R}^2$ with the standard inner product. Define $S:V\to V$ by 
+$$S
+\begin{pmatrix}
+    x_1\\
+    x_2
+\end{pmatrix}
+=
+\begin{pmatrix}
+    x_2\\
+    x_1
+\end{pmatrix}
+$$
+ Then it is easy to see that $S$ is an isometry.
+ \\
+ \textbf{Example:} $V=W=\mathbb{R}^2$ and $T$ be such that 
+ $$
+T
+\begin{pmatrix}
+    x_1\\
+    x_2
+\end{pmatrix}
+=
+\begin{pmatrix}
+    \frac{x_1 +x_2}{\sqrt{2}}\\
+    \frac{x_1-x_2}{\sqrt{2}}
+\end{pmatrix}
+ $$
+ One can check that $T$ is also an isometry. 
+ \\
+\begin{theorem}
+    Let V,W be inner product spaces and $S:V\to W$ be a linear map. Then the following are equivalent:
+    \begin{enumerate}
+        \item $S$ is a linear map.
+        \item $S$ preserves distances, ie, $$d(S\mathbf{x},S\mathbf{y})=d(\mathbf{x},\mathbf{y})$$
+        \item $S$ preserves the inner product 
+         $$\big{<}S\mathbf{x},S\mathbf{y}\big{>}=\big{<}\mathbf{x},\mathbf{y}\big{>}$$
+        \item $S^{*}S=I_{V}$
+        \end{enumerate}
+\end{theorem}
+\begin{proof}
+  (1$\implies$2) Given that $||S\mathbf{x}||=||\mathbf{x}||$. Consider $\mathbf{x},\mathbf{y}\in V$. Then 
+  $$d(S\mathbf{x},S\mathbf{y})=||S\mathbf{y}-S\mathbf{x}||=||S(\mathbf{y}-\mathbf{x})||=d(\mathbf{x},\mathbf{y})$$  
+(2$\implies$3) If $\mathbb{F}=\mathbb{R}$, then
+$$\big{<}S\mathbf{x},S\mathbf{y}\big{>}=\frac{1}{4}\big{(}||S\mathbf{x}+S\mathbf{y}||^2 -||S\mathbf{x}-S\mathbf{y}||^2\big{)}$$
+which reduces to $\big{<}\mathbf{x},\mathbf{y}\big{>}$.
+A similar expansion for the complex case gives us our result.\\
+(3$\implies$4) It is given that $\big{<}S\mathbf{x},S\mathbf{y}\big{>}=\big{<}\mathbf{x},\mathbf{y}\big{>}$. This simplifies to
+$$\big{<}\mathbf{x},S^{*}S\mathbf{y}\big{>}=\big{<}\mathbf{x},\mathbf{y}\big{>}\implies \big{<}\mathbf{x},S^{*}S\mathbf{y}\big{>}=\big{<}\mathbf{x},I_{V}\mathbf{y}\big{>}\implies S^{*}S=I_V$$
+(4$\implies$1) It is given that $S^{*}S=I_V$. Now for $\mathbf{x}\in V$,
+$$||S\mathbf{x}||^2=\big{<}S\mathbf{x},S\mathbf{x}\big{>}=\big{<}\mathbf{x},S^{*}S\mathbf{x}\big{>}=\big{<}\mathbf{x},I_V \mathbf{x}\big{>}=\big{<}\mathbf{x},\mathbf{x}\big{>}=||\mathbf{x}|^2$$
+\end{proof}
+
+\begin{proposition}
+    Let $V,W$ be inner product spaces. Suppose $S:V\to W$ is an isometry. Suppose $\{\mathbf{v}_1,\dots,\mathbf{v}_k\}$ are orthonormal in $V$. Then $\{S\mathbf{v}_1,\dots,S\mathbf{v}_k\}$ are orthonormal in $W$.
+\end{proposition}
+The proof for this is quite simple.
+\begin{theorem}
+    Suppose $V,W$ are finite dimensional inner product spaces. If there exists an isometry $S:V\to W$ then $\text{dim}(W)\geq \text{dim}(V)$.
+\end{theorem}
+\textbf{Exercise:} Show that the converse of this is also true.
+
+
+
+
+
 \end{document}

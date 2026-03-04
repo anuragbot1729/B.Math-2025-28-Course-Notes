@@ -1,0 +1,239 @@
+---
+title: "ISCD Worksheet 3"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+```{r}
+library(dplyr)
+library(tidyverse)
+library(viridisLite)
+```
+**Question 1**
+
+a)**read.csv**: This is a built-in function in R that reads a CSV file and generates a data frame from it, with cases corresponding to lines and variables to fields in the file.
+
+b)**setwd**: R can only access files that are in its current working directory. setwd is used to set the working directory from where reading and writing of files will be done. The syntax is of the form setwd(dir) where dir is a string representing the path of the required directory.
+
+c)**getwd**: getwd returns the absolute filepath of the current working directory.
+
+2.
+a)
+```{r}
+setwd("/home/anurag/Documents/Dice")
+DiceR=read.csv("Dice.csv",header=T)
+names(DiceR)="Sum"
+DiceR$Sum=as.numeric(DiceR$Sum)
+Dice=na.omit(DiceR$Sum)
+hist(Dice)
+summary(Dice)
+```
+The first line is to create a dataframe from the CSV file Dice.csv using the read.csv function we discussed above. Also, header=T makes it so that R interprets the first row of the CSV file as a list of variable names. The actual data gets considered from the second row onwards.
+
+names(DiceR) is used to get the list of column names from the given dataframe. The CSV file Dice only has one column, so setting names(DiceR) to Sum renames that column to Sum.
+
+DiceR$Sum is used to access the column called Sum in this dataframe. as.numeric(DiceR$Sum) takes the whole column vector, converts each entry to a numeric data type and then reassigns that numeric vector to the column.
+
+na.omit(DiceR$Sum) removes all unavailable or conflicting entries from the column vector and setting it to Dice assigns the corrected entries to this new variable.
+
+hist(Dice) takes the entire range of entries in this vector, divides them into bins of appropriate length and then displays the frequency of dice rolls summing to values in that bin.
+
+Finally, summary(Dice) shows a descriptive statistical report of the dataframe by showing markers such as the mean sum, the maximum and minimum sums and so on.
+
+b)
+```{r}
+setwd("/home/anurag/Documents/Dice")
+DiceR=read.csv("Dice.csv",header=T)
+names(DiceR)="Sum"
+DiceR$Sum=as.numeric(DiceR$Sum)
+Dice=na.omit(DiceR$Sum)
+cs=(Dice-mean(Dice))/(sd(Dice))
+mean(cs)
+sd(cs)
+onesdcs=cs[cs>-1& cs<1]
+twosdcs=cs[cs>-2& cs<2]
+threesdcs=cs[cs>-3& cs<3]
+```
+
+The cs=(Dice-mean(Dice))/sd(DiceR$Sum) is used to standardise the data so that this vector of random variables can be compared with the normal distribution. 
+
+The mean of the standardised data is very close to 0, as it should be, since ideally the limitting distribution of the standardised data should follow Normal(0,1).
+
+Similarly, the standard deviation of cs checks out to be 1, as expected. 
+
+Finally, the last three lines are recording entries from the vector cs that are atmost one,two or three standard deviations away from the normal on either end.
+
+While the standardisation seems to have worked, we would also like to look at what proportion of the sample lies within onesdcs,twosdcs and threesdcs
+```{r}
+setwd("/home/anurag/Documents/Dice")
+DiceR=read.csv("Dice.csv",header=T)
+names(DiceR)="Sum"
+DiceR$Sum=as.numeric(DiceR$Sum)
+Dice=na.omit(DiceR$Sum)
+cs=(Dice-mean(Dice))/(sd(Dice))
+onesdcs=cs[cs>-1& cs<1]
+twosdcs=cs[cs>-2& cs<2]
+threesdcs=cs[cs>-3& cs<3]
+p1=length(onesdcs)/length(cs)
+p2=length(twosdcs)/length(cs)
+p3=length(threesdcs)/length(cs)
+p1
+p2
+p3
+```
+As seen mathematically, for a standard normal variable, p1,p2,p3 should ideally be around 0.68,0.95,0.997 respectively. Since the values here are extremely close to the the ideal values, we can conclude that the normal distribution provides a well enough approximation for the sum of 5 dice rolls.
+
+3. 
+a) This dataset contains record of daily timeseries of covid19 infections across all states of India as well as a cumulative record of nation-wide infections. There are further records that zero down to district level timeseries during the pandemic. Finally, this dataset also contains record of cowin vaccinations at the district level.
+```{r}
+setwd("/home/anurag/Documents/States")
+statedf=read.csv("states.csv",header=T)
+```
+b) The state suiting this requirement as per my name is Haryana.
+
+c) 
+```{r}
+setwd("/home/anurag/Documents/States")
+statedf=read.csv("states.csv",header=T)
+mystatedf=subset(statedf,State=="Haryana")
+head(mystatedf)
+```
+
+d) 
+```{r}
+setwd("/home/anurag/Documents/States")
+statedf = read.csv("states.csv", header=TRUE)
+
+# Subset for Haryana
+mystatedf = subset(statedf, State=="Haryana")
+
+# Convert Date column
+mystatedf$Date = as.Date(mystatedf$Date, format="%Y-%m-%d")
+
+# Compute Active cases
+mystatedf$Active = mystatedf$Confirmed - (mystatedf$Recovered + mystatedf$Deceased)
+
+# Filter July 1, 2021 to Dec 31, 2021
+plotdf = mystatedf %>% filter(Date>=as.Date("2021-07-01") & Date<=as.Date("2021-12-31"))
+
+# Sort by Date
+plotdf = plotdf[order(plotdf$Date),]
+
+# Plot
+ggplot(plotdf, aes(x=Date, y=Active, color=Date))+
+  geom_line(size=1)+
+  scale_color_viridis_c(option="viridis")+
+  labs(title="Active cases for State – Haryana", x="Dates", y="Cases", color="Date")+
+  scale_x_date(date_breaks="1 month", date_labels="%b-%Y")+
+  theme_minimal()+
+  theme(axis.text.x=element_text(angle=45,hjust=1))
+```
+
+e) 
+```{r}
+setwd("/home/anurag/Documents/States")
+statedf = read.csv("states.csv", header=TRUE)
+mystatedf = subset(statedf, State=="Haryana")
+
+# Ensure Date column is Date type
+mystatedf$Date <- as.Date(mystatedf$Date, format="%Y-%m-%d")
+
+# Create Month column in "YYYY-MM" format
+mystatedf$Month <- format(mystatedf$Date, "%Y-%m")
+
+# Filter March 2020 to Dec 2021
+mystatedf_filtered <- mystatedf %>%
+  filter(Date >= as.Date("2020-03-01") & Date <= as.Date("2021-12-31"))
+
+# Compute total Deceased per month
+monthly_deceased <- mystatedf_filtered %>%
+  group_by(Month) %>%
+  summarise(TotalDeceased = sum(Deceased, na.rm = TRUE)) %>%
+  arrange(Month)
+
+# Plot bar chart
+ggplot(monthly_deceased, aes(x=Month, y=TotalDeceased, fill=Month)) +
+  geom_bar(stat="identity") +
+  scale_fill_viridis_d(option="viridis") +
+  labs(
+    title="Monthly Deceased Totals for State – Haryana",  # replace Haryana if needed
+    x="Months",
+    y="Deceased Total",
+    fill="Month"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x=element_text(angle=45, hjust=1))
+```
+
+f) 
+```{r}
+setwd("/home/anurag/Documents/States")
+statedf = read.csv("states.csv", header=TRUE)
+mystatedf = subset(statedf, State=="Haryana")
+mystatedf$Date <- as.Date(mystatedf$Date, format="%Y-%m-%d")
+mystatedf$Month <- format(mystatedf$Date, "%Y-%m")
+mystatedf_filtered <- mystatedf %>%
+  filter(Date >= as.Date("2020-03-01") & Date <= as.Date("2021-12-31"))
+ggplot(mystatedf_filtered, aes(x=Month, y=Confirmed, fill=Month)) +
+  geom_boxplot() +
+  scale_fill_viridis_d(option="viridis") +
+  labs(
+    title="Monthly Confirmed Cases for State – Haryana",
+    x="Months",
+    y="Confirmed Cases",
+    fill="Month"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x=element_text(angle=45, hjust=1))
+```
+
+g)
+```{r}
+setwd("/home/anurag/Documents/States")
+statedf = read.csv("states.csv", header=TRUE)
+statedf$Date <- as.Date(statedf$Date, format="%Y-%m-%d")
+state_totals <- statedf %>%
+  filter(Date >= as.Date("2020-03-01"),
+         Date <= as.Date("2021-12-31")) %>%
+  group_by(State) %>%
+  summarise(
+    TotalConfirmed = sum(Confirmed, na.rm=TRUE),
+    TotalDeceased = sum(Deceased, na.rm=TRUE)
+  )
+ggplot(state_totals, aes(x=TotalDeceased, y=TotalConfirmed)) +
+  geom_point(size=3, alpha=0.8) +
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(
+    title="Scatter Plot of Confirmed Versus Deceased",
+    x="Deceased Figures (log scale)",
+    y="Confirmed Cases (log scale)"
+  ) +
+  theme_minimal()
+```
+Technically we can label dots by state names but with so many states, there are likely to be many overlaps; compromising legibility.
+```{r}
+setwd("/home/anurag/Documents/States")
+statedf = read.csv("states.csv", header=TRUE)
+statedf$Date <- as.Date(statedf$Date, format="%Y-%m-%d")
+state_totals <- statedf %>%
+  filter(Date >= as.Date("2020-03-01"),
+         Date <= as.Date("2021-12-31")) %>%
+  group_by(State) %>%
+  summarise(
+    TotalConfirmed = sum(Confirmed, na.rm=TRUE),
+    TotalDeceased = sum(Deceased, na.rm=TRUE)
+  )
+ggplot(state_totals, aes(x=TotalDeceased, y=TotalConfirmed)) +
+  geom_point(size=3, alpha=0.8) +
+  scale_x_log10() +
+  scale_y_log10() + geom_text(aes(label=State))+
+  labs(
+    title="Scatter Plot of Confirmed Versus Deceased",
+    x="Deceased Figures (log scale)",
+    y="Confirmed Cases (log scale)"
+  ) +
+  theme_minimal()
+
+```
+
+The above plot shows why trying to label dots by state names might not be such a good idea.

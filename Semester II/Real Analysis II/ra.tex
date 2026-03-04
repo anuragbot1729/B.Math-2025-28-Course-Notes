@@ -1,0 +1,395 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\title{Real Analysis II}
+\author{
+\begin{tabular}{c}
+Anurag (bmat2508@isibang.ac.in)\\[0.6em]
+Instructor: C.R.E Raja
+\end{tabular}
+}
+\date{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\begin{document}
+\maketitle
+\section*{Class 1, January 9 2026}
+\subsection{Riemann Integration}
+The physical meaning of an integral of a function is the area under the curve with the x-axis. 
+We intend to compute the said area by dividing the region into rectangular chunks.\\
+Let $I=[a,b]$ be an interval. A partition $P$ of $I$ is a finite subset of $I$ that contains $a,b$.
+For any partition $P$ there are $x_0,x_1,\dots,x_n$ such that \\$a=x_0<\dots<x_n=b$. We write $P=\{x_0,\dots,x_n\}$.
+Let $f:I\to \mathbb{R}$ be a bounded function. Let $m,M$ be such that $m\leq f(x)\leq M$ for all $x\in I$. Let $P=\{x_0,\dots,x_n\}$ be a partition of $I$. 
+Take $I_k=[x_{k-1},x_k]$ and call:
+\begin{itemize}
+\item $\Delta x_k=x_{k+1}-x_k$
+\item $m_k=\inf_{x\in I_k}f(x)$
+\item $M_k=\sup_{x\in I_k}f(x)$
+\end{itemize}
+Define $$\mathcal{L}(f,P)=\sum_{k=1}^{n}(\Delta x_k)m_k$$
+$$\mathcal{U}(f,P)=\sum_{k=1}^{n}(\Delta x_k)M_k$$
+Clearly, $\mathcal{L}(f,P)\leq \mathcal{U}(f,P)$. If $P$ and $Q$ are two partitions of $I$. We say that $Q$ is a refinement of $P$ if $P\subseteq Q$. We have the following result:
+\begin{lemma}
+In the above situation, $\mathcal{L}(f,P)\leq \mathcal{L}(f,Q)\leq \mathcal{U}(f,Q)\leq \mathcal{U}(f,P)$.
+\end{lemma}
+We will prove this later on.\\ \\ \\ \\ \\
+Let $$\underline{\int_a^b}f(x)\text{ }dx=\sup_{P}\mathcal{L}(f,P)$$ be the Lower Riemann Sum and 
+$$\overline{\int_a^b}f(x)\text{ }dx=\inf_{P}\mathcal{U}(f,P)$$
+A bounded function $f$ in $I=[a,b]$ is called Riemann Integrable if the Lower Riemann Sum and the Upper Riemann sum are the same. In this 
+case we write $f\in \mathcal{R}[a,b]$.\\
+Let $P_1$ and $P_2$ be two partitions of $I$. Let $P=P_1 \cup P_2$. $P$ is a partition and its called a common refinement of $P_1$ and $P_2$.
+\begin{proof}[Proof(Lemma 1)]
+    Let $P=\{x_0<\dots<x_n\}$ and let $Q$ consist of just one more point $y$. Let $i$ be such that $x_{i-1}<y<x_i$.
+    \\Let $$w_1=\inf f(x)\text{, }x_{i-1}\leq x\leq y$$
+    and,
+    $$w_2=\inf f(x)\text{, }y\leq x\leq x_i$$
+    Clearly, we have $w_1\geq m_i$ and $w_2\geq m_i$, where $m_i=\inf f(x)\text{, }x\in [x_{i-1},x_i]$
+Then $$\mathcal{L}(f,Q)-\mathcal{L}(f,P)=w_1(y-x_{i-1})+w_2(x_i-y)-m_i(x_i-x_{i-1})$$
+$$=(w_1-m_i)(y-x_{i-1})+(w_2-m_i)(x_i-y)\geq 0$$
+and hence the first part of the chain is proved. That $\mathcal{L}(f,Q)\leq\mathcal{U}(f,Q)$ is trivial. The last part can be proven analogously.
+\end{proof}
+\begin{proposition}
+    $$\underline{\int_a^b}f(x)\text{ }dx\leq \overline{\int_a^b}f(x)\text{ }dx$$
+\end{proposition}
+\begin{proof}
+Let $P_1$ and $P_2$ be two partitions with $P^{*}$ being their common refinement. Then we have:
+$$\mathcal{L}(f,P_1)\leq\mathcal{L}(f,P^*)\leq\mathcal{U}(f,P^*)\leq\mathcal{U}(f,P_2)$$.
+Keeping $P_2$ fixed and taking supremum over all $P_1$ yields
+$$\underline{\int_a^b}f(x)\text{ }dx\leq \mathcal{U}(f,P_2)$$
+finally taking infimum over all $P_2$ we get our desired result.
+\end{proof}
+\begin{proposition}
+    $f\in \mathcal{R}[a,b]$ iff for each $\epsilon>0$ there is a partition $P$ such that 
+    $$|\mathcal{U}(f,P^{*})-\mathcal{L}(f,P^{*})|<\epsilon$$
+    for any refinement $P^{*}$ of P.
+\end{proposition}
+\begin{proof}
+Assume first that $f$ is Riemann integrable over $I$. Let $\epsilon>0$. \\
+
+$\int_a^b f=\inf$
+
+
+
+
+
+
+
+For the converse, let us assume that for each $\epsilon>0$ there is a partition $P$ such that $$\mathcal{U}(f,P)-\mathcal{L}(f,P)<\epsilon$$
+then 
+$$\inf_{P}\mathcal{U}(f,P)-\sup_{P}\mathcal{L}(f,P)\leq \mathcal{U}(f,P)-\mathcal{L}(f,P)<\epsilon$$
+and 
+$$0\leq \overline{\int_a^b}f(x)\text{ }dx-\underline{\int_a^b}f(x)\text{ }dx<\epsilon$$
+Let $\epsilon\to 0$. Then we get $$\overline{\int_a^b}f(x)\text{ }dx=\underline{\int_a^b}f(x)\text{ }dx$$ and thus $f\in \mathcal{R}[a,b]$.
+\end{proof}
+This is analogous to the Cauchy Criterion for sequences.
+
+
+
+
+\section*{Class 2, January 13 2026}
+\subsubsection{Properties}
+\begin{proposition}
+If $f,g\in \mathcal{R}[a,b]$ then $\alpha f+\beta g\in \mathcal{R}[a,b]$, for any $\alpha,\beta\in \mathbb{R}$.
+\end{proposition}
+\begin{proof}
+$f\in \mathcal{R}[a,b]\implies \exists \text{ partitions } P_1,P_2 \text{ such that }$
+$$\mathcal{U}(f,P_1)-\mathcal{L}(f,P_1)<\epsilon/2$$
+and,
+$$\mathcal{U}(g,P_2)-\mathcal{L}(g,P_2)<\epsilon/2$$
+Let $P=P_1\cup P_2$. Then
+$$\int_a^b f(x)\text{ }dx-\mathcal{L}(f,P)\leq \mathcal{U}(f,P)-\mathcal{L}(f,P)<\epsilon/2$$
+and similarly,
+$$\int_a^b g(x)\text{ }dx\leq \mathcal{U}(g,P)-\mathcal{L}(g,P)<\epsilon/2$$
+We note that $$\mathcal{L}(f+g,P)\geq \mathcal{L}(f,P)+\mathcal{L}(g,P)$$ and $$\mathcal{U}(f+g,P)\leq \mathcal{U}(f,P)+\mathcal{U}(g,P)$$
+And thus,
+$$\int_a^b f(x)\text{ }dx+\int_a^b g(x)\text{ }dx-\mathcal{L}(f+g,P)\leq\int_a^b f(x)\text{ }dx+\int_a^b g(x)\text{ }dx-(\mathcal{L}(f,P)+\mathcal{L}(g,P))<\epsilon$$
+We get a similar bound for the upper sum. This finally yields
+$$\mathcal{U}(f+g,P)-\mathcal{L}(f+g,P)<2\epsilon$$.
+Since $\epsilon$ was arbitrary, $f+g\in \mathcal{R}[a,b]$.
+Now since 
+$$\int_a^b f+g =\sup_{Q}\mathcal{L}(f+g,Q)$$
+we have
+$$\int_a^b f+\int_a^b g-\int_a^b (f+g)\leq \int_a^b f +\int_a^b g-\mathcal{L}(f+g,P)<\epsilon$$
+letting $\epsilon\to 0$ we get 
+$$\int_a^b f+\int_a^b g-\int_a^b (f+g)\leq 0$$
+and similarly we have the reverse inequality. With this, we conclude that 
+$$\int_a^b(f+g)=\int_a^b f+\int_a^b g$$
+As for the scalar multiple case, let $\alpha\in \mathbb{R}$, $f\in\mathcal{R}[a,b]$.
+Let $P=\{x_0,\dots,x_n\}$ be a partition.\\
+\textbf{Case 1:} $\alpha\geq 0$. Then $$\mathcal{L}(\alpha f,P)=\sum \inf_{x\in I_k}\alpha f(x)\Delta x_k$$
+$$=\sum \alpha \inf f(x)\Delta x_k=\alpha\mathcal{L}(f,P)$$
+Similarly, $\mathcal{U}(\alpha f,P)=\alpha\mathcal{U}(f,P)$. Since this implies
+$$\underline{\int_a^b} \alpha f=\alpha\underline{\int_a^b} f=\alpha\int_a^b f$$
+and,
+$$\overline{\int_a^b}\alpha f=\alpha\overline{\int_a^b} f=\alpha\int_a^b f$$
+so $$\int_a^b \alpha f=\alpha\int_a^b f$$
+
+
+\end{proof}
+\begin{proposition}
+    Let $f\in \mathcal{R}[a,b],\text{ }c\in [a,b]$. Then $f\in \mathcal{R}[a,c],f\in\mathcal{R}[c,b]$ and 
+    $$\int_a^b f=\int_a^c f+\int_c^b f$$
+\end{proposition}
+\begin{proof}
+Let $f_1=f|_{[a,c]}$ and $f_2=f|_{[c,b]}$. Now $f\in\mathcal{R}[a,b]\implies$ there exists a partition $P=\{x_0,\dots,x_n\}$ such that 
+$$\mathcal{U}(f,P)-\mathcal{L}(f,P)<\epsilon$$
+Let $c$ be such that $x_{i-1}<c<x_i$. Let $P^{*}=P\cup\{c\}$. Then 
+$$\mathcal{U}(f,P^*)-\mathcal{L}(f,P^*)\leq \mathcal{U}(f,P)-\mathcal{L}(f,p)<\epsilon$$
+Let $P_1=\{x_0,\dots,c\}$, $P_2=\{c,\dots,x_n\}$. With this, we have
+$$\mathcal{U}(f,P^*)=\mathcal{U}(f_1,P_1)+\mathcal{U}(f_2,P_2)$$
+and,
+$$\mathcal{L}(f,P^*)=\mathcal{L}(f_1,P_1)+\mathcal{L}(f_2,P_2)$$
+\end{proof}
+\begin{proposition}
+    Let $f\in\mathcal{R}[a,b]$. Then 
+    \begin{enumerate}
+    \item If $m\leq f(x)\leq M \text{ }\forall \text{ }x\in I=[a,b]$, then 
+    $$m(a-b)\leq\int_a^b f\leq M(a-b)$$
+    \item If $g\in\mathcal{R}[a,b]$ such that $g\leq f \text{ }\forall\text{ }x\in I$, then 
+    $$\int_a^b g\leq\int_a^b f$$
+    \item If $|f|\leq M$ then 
+    $$|\int_a^b f|\leq M(b-a)$$
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+Suppose $m\leq f\leq M$ on $I$. Let $P=\{a,b\}$. Now 
+$$\int_a^b f\geq \mathcal{L}(f,P)=(\inf_{I}f(x))(b-a)\geq m(b-a)$$
+Similarly, 
+$$\int_a^b f\leq \mathcal{U}(f,P)\leq M(b-a)$$
+Suppose now that $g\in\mathcal{R}[a,b]$ and $g\leq f$. Then just consider the function $h=f-g\geq 0$. By the previous property, we have
+$$\int_a^b(f-g)\geq 0$$
+and by linearity of the integral, we have (2). The proof of the third property is left as an exercise.
+\end{proof}
+\begin{theorem}
+Any continuous function on $[a,b]$ is Riemann Integrable.
+\end{theorem}
+\begin{proof}
+Let $f:[a,b]\to\mathbb{R}$ be continuous. Then $f$ is bounded and $f$ is uniformly continuous. Let $\epsilon>0$ Then there exists some $\delta>0$ such that 
+$$|f(x)-f(y)|<\epsilon$$
+whenever $|x-y|<\delta$. Let $P=\{x_0<\dots<x_n\}$ be a partition of $[a,b]$ such that
+$$\inf_{x\in I_k}f(x)=f(a_k)$$
+and $$\sup_{x\in I_k}f(x)=f(b_k)$$
+for some $a_k,b_k\in I_k$ as f is continuous. Then 
+$$\mathcal{U}(f,P)-\mathcal{L}(f,P)=|\sum_{k=1}^n(x_k-x_{k-1})(f(b_k)-f(a_k))|\leq\sum_{k=1}^n (x_k-x_{k-1})|f(b_k)-f(a_k)|$$ 
+$$a_k,b_k\in[x_{k-1},x_k]\implies |b_k-a_k|<\delta\implies |f(b_k)-f(a_k)|<\epsilon/(b-a)$$
+and thus 
+$$\mathcal{U}(f,P)=\mathcal{L}(f,P)\leq \frac{\epsilon}{b-a}\sum(x_i-x_{i-1})=\epsilon$$
+and hence $f\in\mathcal{R}[a,b]$.
+\end{proof}
+\begin{theorem}
+Any monotone function on $[a,b]$ is Riemann Integrable.
+\end{theorem}
+\begin{proof}
+For simplicity, we assume $f$ to be monotonically increasing. \\
+Then $f(a)\leq f(x)\leq f(b) \text{ }\forall \text{ }x\in [a,b]$, and hence $f$ is bounded. \\
+Let $P=\{x-_0<\dots<x_n\}$ be a partition such that $$\sup_{x\in I_k}f(x)\leq f(x_k)$$
+and $$\inf_{x\in I_k}f(x)\geq f(x_{k-1})$$
+$$\mathcal{U}(f,P)-\mathcal{L}(f,P)=\sum(x_k-x_{k-1})(\sup_{x\in I_k}f(x)-\inf_{x\in I_k}f(x))$$
+$$\leq \sum (x_k-x_{k-1})(f(x_k)-f(x_{k-1}))<\frac{\epsilon}{f(b)-f(a)}\sum f(x_k)-f(x_{k-1})<\epsilon$$
+\end{proof}
+\textbf{Homework:} If $\int_a^b f=0,\text{ }f\geq 0$ and $f$ is continuous on $[a,b]$. Then $f\equiv 0 \text{ }\forall\text{ }x\in [a,b]$.
+\begin{proposition}
+Let $f\in\mathcal{R}[a,b]$, $m\leq f(x)\leq M$ on $[a,b]$ and $\phi :[m,M]\to\mathbb{R}$ be continuous. Then $\phi\circ f\in \mathcal{R}[a,b]$.
+\end{proposition}
+\begin{proof}
+Let $\epsilon>0$. Then there exists a $\delta >0$ such that 
+$$|\phi(x)-\phi(y)|<\epsilon$$
+whenever $|x-y|<\delta$. Now $f\in\mathcal{R}[a,b]\implies$ there exists a partition $P$ such that $\mathcal{U}(f,P)-\mathcal{L}(f,P)<\epsilon$. Let 
+$Q$ be a refinement of $P$ so that the length of each of the subintervals in $Q$ is $\delta/4k$ where $k>1$ and $k>\phi(x)$ for all $x\in[m,M]$.
+Now, $\mathcal{U}(f,Q)-\mathcal{L}(f,Q)<\epsilon$ and 
+$$\mathcal{U}(\phi\circ f,Q)-\mathcal{L}(\phi\circ f,Q)=\sum[\sup \phi(f(x))-\inf \phi(f(x))](x_k-x_{k-1})$$
+$$=\sum (M_k - m_k)(x_k-x_{k-1})\text{, where }M_k=\sup_{x\in I_k}\phi(f(x))\text{ and }m_k=\inf_{x\in I_k}\phi(f(x))$$
+Let $a_k,b_k$ be the supremum and the infimum defined over the $k$-th subintervals respectively. 
+
+
+\end{proof}
+\section*{Class 6, January 27 2026}
+\subsection*{Dirichilet's Test}
+Let $f,g:[a,\infty)\to\mathbb{R}$ for some $a\in\mathbb{R}$. Assume that $g$ is monotonic and $\lim_{x\to\infty}g(x)=0$. If $f$ is continuous and if there is a positive $M$ such that 
+$$\big{|}\int_a^x f(t)\text{ }dt\big{|}\leq M$$ for all $x>a$ and $g(x)$ is differentiable. Then $\int_a^{\infty} f(x)g(x)\text{ }dx$ converges.
+\begin{proof}
+    We will use the fact that $g$ is differentiable. We let 
+    $$F(x)=\int_a^xf(t)dt$$ for all $x\geq a$. Then $|F(x)|\leq M$ for all $x\geq a$. Now
+    $$\int_b^c f(x)g(x)dx=F(c)g(c)-F(b)g(b)-\int_b^c F(x)g'(x)dx\text{ (using integration by parts)}$$
+As $F$ is bounded, 
+$$F(c)g(c),F(b)g(b)\to 0$$ as $b\to\infty$. Then 
+$$\big{|}\int_b^c F(x)g'(x)dx\big{|}\leq \int_b^c |F(x)|\cdot|g(x)|dx\leq M\int_b^c |g'(x)|dx $$
+Since $g$ is monotonic, $g'$ does not change sign and thus we have 
+$$\int_b^c |g'(x)|dx=|\int_b^c g'(x)dx|=|g(c)-g(b)|$$
+where the last term goes to 0 as $b\to \infty$.
+So the integral converges. 
+\end{proof}
+\begin{proposition}
+    Let $f:[a,b]\to\mathbb{R}$ be a bounded function. Suppose $f\in\mathcal{R}[c,b]$ for all $c\in(a,b)$. Then $f\in\mathcal{R}[a,b]$ and $$\int_a^b f(x)\text{ }dx=\lim_{c\to a}\int_c^b f(x)\text{ }dx$$
+\end{proposition}
+\begin{proof}
+    Let $\epsilon>0$. Let $M>|f(x)|$ for all $x\in[a,b]$. $f\in\mathcal{R}[a+\frac{\epsilon}{4M},b]$. There is a parition $P$ of this interval such that
+    $$\mathcal{U}(P,f)-\mathcal{L}(P,f)<\frac{\epsilon}{2}$$
+    Let $\tilde{P}=P\cup\{a\}$. Then 
+    $$\mathcal{U}(\tilde{P},f)-\mathcal{L}(\tilde{P},f)$$
+    $$=\big{[}\sup_{a\leq x\leq a+\frac{\epsilon}{4M}}f(x)-\inf_{a\leq x\leq a+\frac{\epsilon}{4M}}f(x)\big{]}+\mathcal{U}(P,f)-\mathcal{L}(P,f)$$
+Now,
+$$|\sup f(x)|\leq \sup |f(x)|\leq M\text{ for all }x$$
+\end{proof}
+\begin{theorem}
+    Let $f:[a,b]\to\mathbb{R}$ be a bounded function. Suppose $f$ is continuous on $[a,b]$ except possibly at finitely many points. Then $f\in\mathcal{R}[a,b]$.
+\end{theorem}
+\begin{proof}
+    Suppose $f$ is discontinuous on the set $F$ and for simplicity assume that $F=\{a\}$. The idea is to break the entire interval at points of discontinuity. Then it is enough to show that $f$ is Riemann integrable on an interval even if it is discontinuous at the endpoints.   
+\end{proof}
+We know that if $f$ is bounded on $[a,b]$ and $\int_c^b f(x)\text{ }dx$ exists for any $c\in[a,b]$ then this integral converges to $\int_a^b f(x)\text{ }dx$. But what if $f$ is not bounded on the interval?
+\\
+Let $f:(a,b]\to\mathbb{R}$ and $f\in\mathcal{R}[x,b]$ for every $x\in[a,b]$. We say that 
+$$\int_a^b f(x)\text{ }dx$$
+exists( or converges) if 
+$$\lim_{x\to a}\int_x^b f(x)\text{ }dx$$ 
+exists.\\
+\textbf{Example:} $$\int_\epsilon^b x^{-p}\text{ }dx=\frac{b^{1-p}-\epsilon^{1-p}}{1-p}$$ for $p\neq 1$.
+Then the integral converges to $\frac{b^{1-p}}{1-p}$ as $\epsilon\to 0$. \\
+Similarly, we can define $\int_a^b f(x)$
+\section*{Class 7, February 3 2026}
+$f_n$ is said to converge pointwise to $f$ in $E$ if for every $\epsilon>0$ and and every $x\in E$ there exists $N\in \mathbb{N}$ such that for all $n\geq N$, 
+$$|f_n(x)-f(x)|<\epsilon$$
+$f_n$ is said to converge uniformly to $f$ if the same $N$ works for every $x\in E$.\\
+We consider double sequences. Suppose $a_{m,n}=\frac{n}{n+m}$. Then $\lim_{n\to \infty}a_{m,n}=1$ and $\lim_{m\to\infty}a_{m,n}=0$. This shows that in general we cannot swaps double limits over a doubly indexed sequence. We cannot swap limits in pointwise convergence. \\
+Take the example, $$f_m(x)=\lim_{n\to\infty}(\cos{m!\pi x})^{2n}=
+\begin{cases}
+0 \text{ if }x\in \mathbb{Q}\\
+1 \text{ if }x\in \mathbb{Q}, \text{ }x=\frac{p}{q},\text{ }m\geq q
+\end{cases}
+$$
+Taking $m\to\infty$, we find
+$$f(x)=
+\begin{cases}
+0 \text{ if }x\notin \mathbb{Q}\\
+1 \text{ if }x\in \mathbb{Q}
+\end{cases}
+$$
+Next, we consider the example 
+$$f_n (x)=n^2 x(1-x^2)^n\text{ , }x\in [0,1]$$
+Then, 
+$$\lim_{n\to\infty}f_n (x)=0$$
+\subsection*{Uniform Convergence}
+Let $E$ be a set and $f_n$ be a sequence of $\mathbb{R}/\mathbb{C}$ valued functions on $E$. We say that $f_n$ converges to uniformly to a function $f$ on $E$ if for each $\epsilon>0$, there is an $N\in\mathbb{N}$ such that for all $n\geq N$, $$|f_n(x)-f(x)|<\epsilon$$
+for all $x\in E$. In this case we write $f_n\xrightarrow{u} f$ on $E$. Clearly, for a finite set $E$, pointwise and uniform convergence are all the same since we are able to get a maximum $N$ that works for all $x\in E$.
+\begin{proposition}
+If $f_n\to f$ on E, then for each $x\in E$, $f_n\to f$ pointwise in E.
+\end{proposition}
+We have a Cauchy Criterion here as well.
+\begin{theorem}
+    Let $\{f_n\}_{n\in\mathbb{N}}$ be a sequence of functions on $E$. Then $\{f_n\}_{n\in\mathbb{N}}$ converges uniformly to a function $f$ on $E$ iff for each $\epsilon>0$, there exists an $N\in\mathbb{N}$, $$|f_m(x)-f_n(x)|<\epsilon$$ for every $m,n\geq N$
+\end{theorem}
+\begin{proof}
+    $(\impliedby)$
+    Suppose $\{f_n\}_{n\in\mathbb{N}}$ converges uniformly to a function $f$ on $E$. Let $\epsilon>0$. Then by uniform convergence, 
+    $$|f_n(x)-f(x)|<\epsilon$$
+    for every $x\in E$ and for all $n\geq N$ for some $N\in\mathbb{N}$ depending on our choice of $\epsilon$. Then for any other $m\geq N$, we have by the triangle inequality,
+    $$|f_m(x)-f_n(x)|<2\epsilon$$
+    Since $\epsilon$ was arbitrary, we have our result.\\
+    $(\implies)$Suppose to each $\epsilon>0$, there is an $N\in\mathbb{N}$ such that $$|f_n(x)-f_m(x)|<\epsilon$$ for all $m,n\geq N$ and for all $x\in E$. Thus the sequence $\{f_n(x)\}_{n\in\mathbb{N}}$ is Cauchy for every $x$. Then $\{f_n(x)\}_{n\in\mathbb{N}}$ converges for every $x\in E$. Then we let $m\to\infty$, to get
+    $$-\epsilon\leq f_n(x)-f(x)\leq\epsilon$$
+    But since $\epsilon$ was arbitrary, we have uniform convergence.
+\end{proof}
+\begin{theorem}[$L^{\infty}$ Test]
+    Let $\{f_n\}_{n\in\mathbb{N}}$ be a sequence of functions on a set E and $f$ be a function on $E$. Then $\sup_{x\in E}{|f_n(x)-f(x)|}\to 0$ iff $f_n\xrightarrow{u}f$.   
+\end{theorem}
+\begin{proof}
+    Let $f_n\xrightarrow{u}f$. So to each $e\epsilon$ there is an $N\in\mathbb{N}$ such that $|f_n(x)-f(x)|<\epsilon$ for all $n\geq N$ and $x\in E$. \\
+     $(\iff)$ to each $\epsilon>0$, there is an $N\in\mathbb{N}$ such that
+    $$\sup_{x\in E}|f_n(x)-f(x)|\leq \epsilon$$ for all $x\in E$.\\
+    $(\iff)$ $$\sup_{x\in E}|f_n(x)-f(x)|\to 0 \text{ as }n\to \infty$$
+\end{proof}
+\textbf{Exercise: }Show that if $f_n\xrightarrow{u}f$, then $|f_n|\xrightarrow{u}|f|$.\\
+\textbf{Exercise: }If $f_n\xrightarrow{u}f$ then does $\sup_{x\in E}f_n\to\sup_{x\in E}f$ ?
+\subsection*{Series}
+Let $\{f_n\}_{n\in\mathbb{N}}$ be a sequence of functions on a set $E$. We say that $\sum_{n=1}^{\infty}f_n$ converges uniformly on $E$ if the sequence of partial sums converges.
+\begin{theorem}[Weirstrass M-Test]
+    Let $\{f_n\}_{n\in\mathbb{N}}$ be a sequence of functions and let $M_n=\sup_{x\in E}|f_n(x)|$. Then $\sum_{n=1}^{\infty}f_n$ converges uniformly if $\sum_{n=1}^{\infty}M_n<\infty$. 
+\end{theorem}
+\begin{proof}
+    Since $\sum_{n=1}^{\infty}M_n$ converges, for each $\epsilon$ there is an $N$ such that $\sum_{k=n}^{m}M_k<\epsilon$ for all $m\geq n\geq N$. Then 
+    $$|\sum_{k=n}^{m}f_k|\leq |\sum_{k=n}^{m}M_k|<\epsilon$$
+    Therefore, $\sum_{n=1}^{\infty}f_n(x)$ converges. 
+\end{proof}
+The M-Test works only in one direction.\\
+\textbf{Example:} $f_n(x)=\frac{x^{2n}}{n^2}$ , $x\in [-1,1]$. Now $M_n=\sup |f_n(x)|=\frac{1}{n^2}$. Then since the sum of this series converges, the original series converges as well.\\
+\textbf{Example:} $$f_n(x)=
+\begin{cases}
+0 \text{ if }x\neq \frac{1}{n}\\
+\frac{1}{n} \text{ if }x=\frac{1}{n}
+\end{cases}
+$$
+But we find that the sum of supremums does not converge. 
+\begin{theorem}
+    Let $f_n:[a,b]\to \mathbb{R}$ be a sequence of functions that converges uniformly to a function $f$ on $[a,b]$. 
+If $\lim_{t\to x}f_n(x)=A_n$ exists, for some $x\in [a,b]$ for all $n\in\mathbb{N}$ then 
+$$\lim_{n\to\infty}A_n$$
+exists and equals 
+$$\lim_{t\to x }f(t)=\lim_{t\to x}\lim_{n\to\infty}f_n(t)$$
+Thus the limits can be exchanged.
+\end{theorem}
+\begin{proof}
+    First we show that $\{A_n\}_{n\in\mathbb{N}}$ converges. For this we show that it is Cauchy. Let $\epsilon>0$, then there exists some $N$ such that $$|f_n(t)-f_m(t)|<\epsilon$$ for all $m,n\geq N$ and for all $t\in [a,b]$. Let $m,n\geq N$. Let $t\to x$ in the previous equation, then
+    $$\lim_{t\to x}|f_m(t)-f_n(t)|\geq \epsilon$$ and since the absolute value is continuous, we have $$|A_m-A_n|\leq \epsilon$$. This implies that the sequence is Cauchy. Then $\{A_n\}_{n\in\mathbb{N}}$ converges.
+Let $A=\lim A_n$. Then there is an $N$ such that $|f_n(t)-f(t)|<\frac{\epsilon}{3}$ for all $n\geq N$, $t\in[a,b]$ and $|A_n-A|<\frac{\epsilon}{3}$ for all $n\geq N$. Now $\lim f_n=A_n\implies$ there is a $\delta>0$ such that $|f_N(t)-A_N|$ for all $t\in (x-\delta,x+\delta)\cap [a,b]-\{x\}$. 
+Finally,
+$$|f(t)-A|\leq |f(t)-f_{N}(t)|+|f_{N}(t)-A_N|+|A_N-A|<\epsilon$$ for all $t\in(x-\delta,x+\delta)\cap [a,b]-\{x\}$.
+From this, our result follows easily.
+\end{proof}
+\begin{corollary}
+    Uniform limit of continuous functions is continuous.
+\end{corollary}
+\begin{proof}
+    Let $\{f_n\}$ be a sequence of continuous functions on an interval $I$ such that $f_n\xrightarrow{u}f$. Let $x\in I$, for all $n$, we have
+    $$\lim_{t\to x}f_n(t)-f_n(x)\implies \lim_{t\to x}f(t)=\lim_{n\to \infty}f_n(x)=f(x)\implies f\text{ is continuous at }x$$
+\end{proof}
+\section*{Class 8, February 6 2026}
+\begin{corollary}
+    Let $\{f_n\}$ be a sequence of functions in an interval $I$. Suppose $\sum_{n=1}^{\infty}f_n(x)$ converges uniformly and each of the $f_i(x)$ are continuous. Then their sum is also continuous.
+\end{corollary}
+\begin{proof}
+    Let $s_n$ be the $n$-th partial sum. Then $s_n\to \sum_{n=1}^{\infty}f_n$. Now, the uniform limit of continuous function is continuous. Thus our result holds.
+\end{proof}
+\begin{theorem}
+    There exists a continuous function that is nowhere differentiable.
+\end{theorem}
+\begin{proof}
+    Let $f(x)=|x|$ defined on $[-1,1]$. Then $f$ is not differentiable just at one point. Now define $\phi:\mathbb{R}\to\mathbb{R}$ as 
+    $$
+    \phi(x)=
+    \begin{cases}
+    |x|, \text{ } |x|\leq 1\\
+    |x+2k| ,\text{ }|x+2k|\leq 1\text{ where }k \text{ is an integer}
+    \end{cases}
+    $$
+$\phi$ is the extension of $f$ with $\phi(x+2)=\phi(x)$. Therefore, $\phi$ is continuous and one can verify that $|\phi(x)-\phi(y)|\leq |x-y|$. Let $g(x)=\sum_{n=0}^{\infty}\big{(}\frac{3}{4}\big{)}^n \phi(4^n x)$
+Now, 
+$$|\big{(}\frac{3}{4}\big{)}^n \phi(4^n x)|\leq \big{(}\frac{3}{4}\big{)}^n$$
+which leads to us conclude that $g$ converges uniformly and thus is continuous.
+\\ Now let $x\in\mathbb{R}$. Fix $n\in\mathbb{N}$. Let $\delta_m =\pm \frac{1}{2}4^{m}$ where sign is chosen so that there are no integers between $4^m x$ and $4^m (x+\delta_m)$.
+Let $\gamma_m=\frac{\phi(4^m (x+\delta_m))-\phi(4^m x)}{\delta_m}$
+For $n>m$, $4^n \delta_m$ is an even integer and $\phi(4^n (x+\delta_m))=\phi(4^n x)$. Therefore, $\gamma_n=0$. 
+Thus we have $$\sum_{n=0}^{\infty}\big{(}\frac{3}{4}\big{)}^n \frac{\phi(4^n (x+\delta_m))-\phi(4^n x)}{\delta_m}$$ 
+One can conclude now that $g$ is not differentiable anywhere.     
+\end{proof}
+\begin{corollary}
+    Let $\{f_n\}$ be a sequence of Riemann Integrable functions such that their sum converges uniformly on $[a,b]$. Then $\sum_{n}f_n \in \mathcal{R}[a,b]$ and $$\int_a^b \sum_{n}f_n=\sum_{n}\int_a^b f_n$$
+\end{corollary}
+\begin{theorem}
+    Let $\{f_n\}$ be a sequence such that 
+    \begin{enumerate}
+        \item Each $f_n$ is continuous on $[a,b]$.
+        \item $f_n$ converges to $f$ pointwise for all $x\in[a,b]$ for some continuous function $f$.
+        \item $f_n$ is a decreasing sequence.
+    \end{enumerate}
+    Then $$\int_a^b f_n=\int_a^b f$$
+    This is analogous to MCT. In fact, $f_n\xrightarrow{u}f$
+\end{theorem}
+\begin{proof}
+    Assume first that $f$ is identically 0 on $[a,b]$. Let $g_n=f_n-f$. Then $g_n(x)\geq g_{n+1}(x)\text{ }\forall \text{ }x\in[a,b]$ and $g_n(x)\to 0$. Let $\epsilon>0$ and let$k_n=\{x \text{ : }g_n(x)>\epsilon \}$. Then we claim that some $k_n$ are empty. If this were false, assume that all $k_n$ were non-empty. Suppose $x_n\to x$. Then $x_n\in k_n \text{ }\forall\text{ }n$. Since $x_n\in k_n$, $g_n(x_n)>\epsilon$. Then letting $n\to\infty$ we find that $x\in k_n$ for all $n$. That means that $g_m(x)>\epsilon$ for all $m$ for some $x$. But this is a contradiction to the fact that $g_n$ converges to 0. Therefore, $k_n$ is empty for some $n$ and since this is a decreasing sequence, we conclude that $k_m$ is empty for all $m\geq n$ and all $x\in [a,b]$. Therefore, $g_n$ converges to 0 uniformly. 
+ \end{proof}
+\textbf{Example: }Let $f_n(x)=\frac{1}{nx+1}$. Note that $f_n$ is decreasing but does not converge unformly. This is fails since this is considered in an open interval. 
+
+\end{document}

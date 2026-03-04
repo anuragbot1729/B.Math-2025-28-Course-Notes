@@ -1,0 +1,80 @@
+---
+title: "ISCD Homework 3"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+**Question 1**
+
+a) In the first section we just pick a Uniform(0,1) random number that we denote as the probability of obtaining heads from a coin toss, and similarly the probability for tails. Then we simulate a coin toss by sampling a result from either of HEADS or TAILS.
+
+In the second section we declare a matrix which would be our adjacency matrix and use two for loops with appropriate ranges to check for each pair (i,j) if the coin toss at that iteration of the inner for loop results in heads, then we set that entry to 1; otherwise it will be 0. We do this for all i>j and similarly set the (j,i)-th entries to the same values due to symmetry. Finally we set the diagonal entries to 0 since self loops are not allowed.
+
+In the third section we use the igraph package to generate a random graph from the adjacency matrix as an undirected graph. Then we draw the graph in a plot. gsize() and degree determine the number of edges and a vector containing the degree of each vertex respectively. Finally, we have a histogram describing the degree distribution of this random graph.
+
+b)
+
+```{r}
+number_of_vertices <- 10
+adj_matrix <- matrix(NA, nrow=number_of_vertices, ncol=number_of_vertices)
+
+for(i in 1:(number_of_vertices-1)){
+  for(j in (i+1):number_of_vertices){
+    junk <- sample(c("HEAD","TAIL"), 1, prob=c(1/6,5/6))
+    if(junk=="HEAD"){
+      adj_matrix[i,j] <- 1
+    } else {
+      adj_matrix[i,j] <- 0
+    }
+    adj_matrix[j,i] <- adj_matrix[i,j]
+  }
+}
+diag(adj_matrix) <- 0
+adj_matrix <- apply(adj_matrix, 2, as.numeric)  # <- important
+
+library(igraph)
+ER_graph <- graph_from_adjacency_matrix(adj_matrix, mode="undirected")
+#Part c)
+plot(ER_graph, edge.arrow.size=0.5, vertex.color="#fde725", vertex.size=20,
+     vertex.frame.color="#440154", vertex.label.color="#440154")
+#Part d) The number of edges is 
+gsize(ER_graph)
+#Part e) The degree vector for this random graph is
+degree(ER_graph)
+#Part f) The histogram for the degree distribution is
+hist(degree(ER_graph), main="Degree distribution of Erdos-Renyi graph") 
+```
+
+**Question 2**
+The value of probability that I got in class was 1/6. Using this we get:
+
+```{r}
+p <-1/6
+prob_of_head <- p
+prob_of_head;
+prob_of_tail <- 1-prob_of_head
+prob_of_tail;
+coin_toss_outcome <- sample(c("HEAD","TAIL"), 1, prob = c(prob_of_head, prob_of_tail) )
+coin_toss_outcome
+number_of_vertices<- 10
+adj_matrix <- matrix(NA, nrow=10, ncol=10)
+adj_matrix;
+for(i in 1:(number_of_vertices-1)){
+  for(j in (i+1):number_of_vertices) {
+    print(c(i,j))
+    junk = sample(c("HEAD","TAIL"), 1, prob = c(prob_of_head,prob_of_tail))
+    if(junk=="HEAD")
+    adj_matrix[i,j] = 1
+    else
+      adj_matrix[i,j]= 0
+    adj_matrix[j,i] = adj_matrix[i,j]
+  }
+}
+diag(adj_matrix) <- 0 
+adj_matrix;
+library(igraph)
+ER_graph <- graph_from_adjacency_matrix(adj_matrix,mode="undirected")
+ER_graph
+plot(ER_graph, edge.arrow.size=0.5, vertex.color="#fde725", vertex.size=20, 
+     vertex.frame.color="#440154", vertex.label.color="#440154")
+```

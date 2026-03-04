@@ -1,0 +1,79 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\title{Linear Algebra II Home Assignment 1}
+\author{
+\begin{tabular}{c}
+Anurag Bhunia (bmat2508@isibang.ac.in)\\[0.6em]
+\end{tabular}
+}
+\date{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\newcommand{\Col}{\operatorname{Col}}
+\newcommand{\Null}{\operatorname{Null}}
+\begin{document}
+\maketitle
+\begin{enumerate}
+\item Consider a permutation $\sigma :=(2,5)(1,4,3)$ of $\{1,2,3,4,5,6\}$. Write down the matrices $P^{\sigma},P^{\sigma^{-1}}$. Verify that $\det{P^{\sigma}}=\epsilon(\sigma)$ for this permutation.
+\end{enumerate}
+\begin{proof}[Sol.]
+Due to the way this permutation has been defined, it must swap the second and fifth coordinates of a vector in $\mathbb{R}^6$, and must take the first coordinate to the fourth, the fourth to the third and the third back to the first; all while keeping the sixth coordinate in its place.
+Let the matrix for $\sigma$ be $P^{\sigma}$. Then the action of $P^{\sigma}$ on the vector 
+$\begin{pmatrix}
+1\\
+2\\
+3\\
+4\\
+5\\
+6
+\end{pmatrix}$ must be as follows:
+$$P^{\sigma}
+\begin{pmatrix}
+1\\
+2\\
+3\\
+4\\
+5\\
+6
+\end{pmatrix}=
+\begin{pmatrix}
+3\\
+5\\
+4\\
+1\\
+2\\
+6
+\end{pmatrix}
+$$
+In that case $P^{\sigma}$ acts on the rows of a vector $\mathbf{v}\in\mathbb{R}^6$. We observe that the matrix 
+$$
+\begin{pmatrix}
+0&0&1&0&0&0\\
+0&0&0&0&1&0\\
+0&0&0&1&0&0\\
+1&0&0&0&0&0\\
+0&1&0&0&0&0\\
+0&0&0&0&0&1
+\end{pmatrix}
+$$
+does just that, and since matrices for linear transformations are unique, we conclude that $P^{\sigma}$ is the matrix as described above.\\
+Next we note that if a permutation matrix takes the $i$-th coordinate of a vector to the $j$-th coordinate then the inverse should take the $j$-th coordinate to the $i$-th one.
+With this, we have that 
+$$
+P^{\sigma^{-1}}=
+\begin{pmatrix}
+0&0&0&1&0&0\\
+0&0&0&0&1&0\\
+1&0&0&0&0&0\\
+0&0&1&0&0&0\\
+0&1&0&0&0&0\\
+0&0&0&0&0&1
+\end{pmatrix}
+$$\\
+We can bring the permutation matrix back to the identity by 
+\renewcommand{\qedsymbol}{}
+\end{proof}
+\end{document}

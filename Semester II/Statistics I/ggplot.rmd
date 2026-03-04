@@ -1,0 +1,151 @@
+---
+title: "R Scribbles"
+author: "Anurag (bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(viridisLite)
+```
+
+```{r}
+ggplot(data=mpg,aes(x=class,y=hwy))+geom_boxplot()
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,colour=drv))
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,shape=drv))
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,size=drv))
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,alpha=drv))
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,colour=drv))+scale_colour_viridis_d()
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,colour=drv))+scale_colour_viridis_d(option="plasma")
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,colour=drv))+scale_colour_viridis_d(option="plasma")+facet_wrap(~class,nrow=2)
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,colour=drv))+scale_colour_viridis_d(option="plasma")+facet_grid(cyl~drv)
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,size=drv),colour="blue")
+ggplot(mpg, aes(x=displ,y=hwy,colour=displ))+geom_point(size=3)+scale_colour_viridis_c()
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,colour=drv))+scale_colour_viridis_d(option="plasma")+facet_wrap(~class,ncol=2)
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,colour=drv))+scale_colour_viridis_d(option="plasma")+facet_grid(.~cyl)
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy,colour=drv))+scale_colour_viridis_d(option="plasma")+facet_grid(cyl~.)
+ggplot(mpg)+geom_smooth(aes(x=displ,y=hwy))
+ggplot(mpg)+geom_smooth(aes(x=displ,y=hwy,linetype=drv),colour="purple")
+ggplot(mpg)+geom_smooth(aes(x=displ,y=hwy,group=drv),se=FALSE)
+ggplot(mpg)+geom_smooth(aes(x=displ,y=hwy,linetype=drv),colour="purple",show.legend=FALSE)
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy))+geom_smooth(aes(x=displ,y=hwy))
+ggplot(diamonds)+geom_bar(aes(x=cut),fill="blue")
+ggplot(diamonds)+stat_count(aes(x=cut),fill="red")
+#Not mentioning a stat will cause error since stat_count only takes x or y values
+ggplot(diamonds)+geom_bar(aes(x=cut,y=price),stat="identity")
+#This fails because ggplot considers each category as an individual group
+#Naming a group fixes it as now ggplot considers the cut variable as one group
+ggplot(diamonds)+geom_bar(aes(x=cut,y=after_stat(prop)))
+ggplot(diamonds)+geom_bar(aes(x=cut,y=after_stat(prop),group=1))
+ggplot(diamonds)+stat_summary(aes(x=cut,y=depth),fun.min=min,fun.max=max,fun=mean)
+ggplot(diamonds)+geom_pointrange(aes(x=cut,y=depth,ymin=mean(depth)-sd(depth),ymax=mean(depth)+sd(depth)))
+ggplot(diamonds)+geom_bar(aes(x=cut,fill=cut))
+ggplot(diamonds)+geom_bar(aes(x=cut,fill=clarity))+scale_fill_viridis_d(option="plasma")+labs(x="hello",y="siva",title="My Friend")
+ggplot(diamonds,aes(x=cut,fill=clarity))+geom_bar(alpha=1/5,position="identity")
+ggplot(diamonds,aes(x=cut,colour=clarity))+geom_bar(alpha=1/5,position="identity",fill=NA)
+ggplot(diamonds)+geom_bar(aes(x=cut,fill=clarity),position="fill")
+ggplot(diamonds)+geom_bar(aes(x=cut,fill=clarity),position="dodge")+scale_fill_viridis_d(option="plasma")+labs(title="Hey there")
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy),position="jitter")
+#One could also use geom_jitter that does exactly the same job 
+ggplot(mpg)+geom_jitter(aes(x=displ,y=hwy))+labs(title="Geom Jitter")
+#geom_count denotes the size of a point by the number of overlaps, it uses stat sum
+ggplot(mpg)+geom_count(aes(x=displ,y=hwy))
+ggplot(mpg)+geom_boxplot(aes(x=class,y=hwy))+coord_flip()
+ggplot(diamonds)+geom_bar(aes(x=cut,fill=cut))+scale_fill_viridis_d(option="plasma")+coord_flip()+coord_polar()+labs(title="Pie Chart")
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy))+geom_abline(slope=3,intercept=2)
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy))+geom_vline(xintercept=1:4)
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy))+geom_vline(xintercept=c(1,5,7))
+ggplot(mpg)+geom_point(aes(x=displ,y=hwy))+geom_hline(yintercept=6)
+```
+
+```{r}
+#creating a dataframe
+df=data.frame(
+    name=c("A","B","C"),
+    age=c(18,19,20),
+    marks=c(80,75,90)
+)
+df
+str(df)
+x=1:3
+y=c("low","medium","high")
+df1=data.frame(x,y)
+df1
+#From a matrix
+mat=matrix(1:6,nrow=3)
+df2=as.data.frame(mat)
+df2
+df$name
+#Accessing by index
+df[2,]
+df[2,3]
+df$gender=c("M","F","friend")
+df
+df$name[2]="Hello"
+df
+df[df$age>18]
+df[df$name=="A"]
+df$gender=NULL
+df1=data.frame(
+    name=c("A","B"),
+    marks=c(80,75)
+)
+df2=data.frame(
+    name=c("C","D"),
+    marks=c(90,85)
+)
+rbind(df1,df2)
+df1
+df2
+#Factors are used to create categorical variables and levels are the numeric labels under them
+df$group=factor(c("Control","Treatment","Control"),levels=c("Control","Treatment"))
+hist(df$marks)
+hist(df$marks,probability=TRUE)
+df
+x=rpois(100,10)
+#Barplot only takes in height values 
+barplot(height=prop.table(table(x)),main="Barplot of Poisson Distribution")
+count=c(a=19,b=15,c=7,d=12)
+barplot(count)
+#We could also add names like this:
+barplot(c(1,2,3,4,5),names.arg=c("A","B","C","D","E"))
+prop.table(table(x))
+#Creating a matrix in R
+m=matrix(1:9,nrow=3,ncol=3)
+m
+#By default matrices in R are column major, we could however also fill them by rows
+m=matrix(1:9,nrow=3,ncol=3,byrow=TRUE)
+m
+y=rnorm(1000)
+hist(y,breaks=seq(-5,5,by=0.1))
+boxplot(marks~age,data=df)
+#Adding multiple plots in the same frame
+par(mfrow=c(2,2))
+x=rnorm(100)
+y=rpois(100,10)
+plot(ecdf(x))
+plot(dpois(y,10))
+boxplot(rnorm(100))
+plot(rnorm(10))
+#Overlaying plots
+x=rnorm(1000)
+hist(x,probability=TRUE)
+lines(density(x))
+y=rpois(1000,10)
+z=dpois(y,10)
+barplot(z)
+pt=prop.table(table(x))
+points(x,pt,pch="19")
+```
+
+```{r}
+x=1:10
+qqnorm(x)
+qqline(x)
+x=rnorm(100)
+qqnorm(x)
+qqline(x)
+y=rnorm(100,mean=2)
+qqplot(x,y)
+abline(0,1)
+```

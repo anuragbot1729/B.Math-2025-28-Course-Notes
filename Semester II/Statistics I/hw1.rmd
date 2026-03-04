@@ -1,0 +1,81 @@
+---
+title: "ISCD Homework 1"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+**Question 1**
+
+a)
+```{r}
+instasee=c(8,8,3,12,13,10,1,8,7);
+x=diff(instasee)
+x
+#This function is showing the difference between two adjacent terms in this tuple
+x1=ifelse(x>=0,x,x+24)
+x1
+#We show the corrected differences, fixing negative differences to account for correct login times
+```
+b)
+```{r}
+max(x1)
+mean(x1)
+min(x1)
+```
+**Question 2**
+
+ a)
+ ```{r}
+ scoreSS=c(7,6,10,8,7,9,9,6,4,10,8,6,9,10)
+ max(scoreSS)
+ min(scoreSS)
+ mean(scoreSS)
+ ```
+b)
+```{r}
+scoreSS[4]=5
+#Corrected score for fourth quiz
+scoreSS
+#New mean
+mean(scoreSS)
+```
+c)
+```{r}
+sum(scoreSS>=9)
+#This seems to evaluate the number of entries in the tuple that are atleast 9
+```
+d)
+```{r}
+#Percentage of scores less than 17
+sum(scoreSS<17)*100/length(scoreSS)
+```
+**Question 3**
+
+a)
+```{r}
+Shreelakshmibill=c(460,330,390,370,460,300,480,320,490,350,300,480)
+#Total amount spent on calls
+sum(Shreelakshmibill)
+```
+b)
+```{r}
+#Lowest monthly spending
+min(Shreelakshmibill)
+#Highest monthly spending
+max(Shreelakshmibill)
+p=sum(Shreelakshmibill>400)
+```
+c)
+```{r}
+#Number of months with spending greater than 400
+p
+#Percentage of months
+p*100/12
+```
+d)
+```{r}
+freemoney=3000*rep(1,12)-Shreelakshmibill
+#Monthly amount left now
+freemoney
+#The average
+mean(freemoney)
+```

@@ -1,0 +1,242 @@
+---
+title: "ISCD Homework 4"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(viridisLite)
+library(ggplot2)
+```
+
+**Question 1**
+
+a)
+
+```{r}
+set.seed(2026)
+#Generating p
+p=runif(1)
+#Getting 100 Uniform(0,1) Samples
+u=runif(100)
+#Appling the inverse CDF transform
+x=ceiling(log(1-u)/log(1-p))
+x
+set.seed(2025)
+#Setting r=5
+r=5
+nb=numeric(100)
+for(i in 1:100){
+    U=runif(r)
+    X=ceiling(log(1-U)/log(1-p))
+    nb[i]=sum(X)
+}
+nb
+```
+
+b)
+
+```{r}
+set.seed(2023)
+u=runif(100)
+#Generating 100 Cauchy samples
+c=tan(pi*(u-0.5))
+c
+```
+
+2.
+
+```{r}
+set.seed(2024)
+ex=rexp(100)
+u=runif(100)
+#Deviation of the exponential distribution
+qqnorm(ex)
+qqline(ex)
+#Deviation of the uniform distribution
+qqnorm(u)
+qqline(u)
+```
+
+3.
+
+0) This is known as the method of moments. Given a sample, we compute its mean and variance. Knowing the distribution, we equate both to their theoretical formulas (in this case, a binomial distribution). The expressions for p-hat and n-hat are exactly those which one would get after solving for the theoretical values of p and n respectively.
+This is used to estimate the parameters pertaining to the given sample.
+
+a)
+
+```{r}
+n=100
+N=20
+p=0.4
+x=rbinom(n,N,p)
+m1=mean(x)
+m2=mean(x^2)
+Nhat=m1^2/(m1-(m2-m1^2))
+phat=(m1-(m2-m1^2))/m1
+#Estimated sample size
+Nhat
+#Estimated probability
+phat
+```
+
+b) For n=1000, we have
+
+```{r}
+n=1000
+N=20
+p=0.4
+x=rbinom(n,N,p)
+m1=mean(x)
+m2=mean(x^2)
+Nhat=m1^2/(m1-(m2-m1^2))
+phat=(m1-(m2-m1^2))/m1
+#Estimated sample size
+Nhat
+#Estimated probability
+phat
+```
+
+The values are quite different from when we had just 100 samples.
+
+c)
+
+```{r}
+#Bin(10,0.1)
+n=100
+N=10
+p=0.1
+x=rbinom(n,N,p)
+m1=mean(x)
+m2=mean(x^2)
+Nhat=m1^2/(m1-(m2-m1^2))
+phat=(m1-(m2-m1^2))/m1
+#Estimated sample size
+Nhat
+#Estimated probability
+phat
+n=1000
+N=10
+p=0.1
+x=rbinom(n,N,p)
+m1=mean(x)
+m2=mean(x^2)
+Nhat=m1^2/(m1-(m2-m1^2))
+phat=(m1-(m2-m1^2))/m1
+#Estimated sample size
+Nhat
+#Estimated probability
+phat
+#Bin(10,0.9)
+n=100
+N=10
+p=0.9
+x=rbinom(n,N,p)
+m1=mean(x)
+m2=mean(x^2)
+Nhat=m1^2/(m1-(m2-m1^2))
+phat=(m1-(m2-m1^2))/m1
+#Estimated sample size
+Nhat
+#Estimated probability
+phat
+n=1000
+N=10
+p=0.9
+x=rbinom(n,N,p)
+m1=mean(x)
+m2=mean(x^2)
+Nhat=m1^2/(m1-(m2-m1^2))
+phat=(m1-(m2-m1^2))/m1
+#Estimated sample size
+Nhat
+#Estimated probability
+phat
+```
+
+4.
+
+a)
+
+```{r}
+x=seq(-2,2,by=0.1)
+y=pnorm(x,0,1)
+plot(x,y,type="l",main="CDF of Standard Normal Distribution")
+```
+
+b)
+
+```{r}
+m=100
+p=0.4
+x=seq(-2,2,by=0.1)
+mu=m*p
+sd=sqrt(m*p*(1-p))
+c=x*sd+mu
+y=pbinom(c,n,p)
+plot(x,y,type="l",main="Standardized Binomial Distribution")
+```
+
+c)
+
+```{r}
+set.seed(1011)
+m=100
+p=0.4
+Y=rbinom(1000,m,p)
+#Histogram for Binomial Distribution
+hist(Y)
+mu=m*p
+sd=sqrt(m*p*(1-p))
+Z=rnorm(1000,mu,sd)
+d=density(Z)
+plot(d,type="l",main="Normal Density Plot")
+```
+
+From the 2 plots, one can conclude that the binomial histogram has a similarity in shape with the normal density plot. This is a consequence of the Central Limit Theorem, as the sample size increases, the binomial distribution ressembles the normal.
+
+5.
+
+```{r}
+# Define the possible outcomes of a single die roll (1 through 6)
+x = c(1,2,3,4,5,6)
+
+# Define the probability for each outcome (1/6 for a fair die)
+probx = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6)
+
+# Simulate 1500 independent die rolls using the defined probabilities
+Rolls = sample(x, size = 1500, replace = T, prob = probx)
+
+# Organize the 1500 rolls into a matrix with 5 rows 
+# This effectively creates 300 groups, where each group has 5 die rolls
+Rollm = matrix(Rolls, nrow = 5)
+
+# Calculate the sum of each column (the sum of the 5 rolls in each group)
+Rollsums = apply(Rollm, 2, sum)
+
+# Load the ggplot2 library for advanced data visualization
+library(ggplot2)
+
+# Manually define the Normal density function formula: 
+# 1/(sqrt(2*pi)*s) * exp(-(x-a)^2 / (2*s^2))
+density = function(x, a, s) { (1/((2*pi)^(0.5)*s )) * exp(-(x-a)^2/(2*s^2)) }
+
+# Convert the vector of sums into a data frame format required by ggplot2
+dfrolls = data.frame(Rollsums)
+
+# Calculate the sample mean (mu) and standard deviation (sigma) of the sums
+mu = mean(dfrolls$Rollsums)
+sigma = sd(dfrolls$Rollsums)
+
+# Create the visualization
+ggplot(data = dfrolls) +
+  # Draw a histogram of the sums; y=..density.. scales it to match a probability curve
+  geom_histogram(mapping = aes(x = Rollsums, y = ..density..), color = "#00846b", fill = NA, binwidth = 1) +
+  # Set the x-axis limits to focus on the range of possible sums (5 to 30)
+  xlim(5,30) +
+  # Overlay the manually defined Normal density function using the calculated mu and sigma
+  geom_function(fun = density, args = list(a = mu, s = sigma), color = "black")
+```
+
+This is a demonstration of the Central Limit Theorem. It simulates rolling a fair die 1500 and recording sums of die rolls from sets of 5. The sum is distributed almost normally as its corresponding histogram aligns closely with the normal density curve.

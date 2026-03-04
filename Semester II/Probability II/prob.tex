@@ -1,0 +1,300 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\title{Probability II}
+\author{
+\begin{tabular}{c}
+Anurag (bmat2508@isibang.ac.in)\\[0.6em]
+Instructor: Mathew Joseph
+\end{tabular}
+}
+\date{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\begin{document}
+\maketitle
+\section*{Class 1, January 9 2026}
+Some notations:
+\begin{itemize}
+\item $\Omega$ : Sample Space (for now we will assume that it is finite or countable).
+\item $\omega$ : Outcomes belonging to the sample space.
+\item Probability $\mathbb{P}(\omega)$ that $0\geq \mathbb{P}(\omega) \geq 1$ and $\sum_{\omega \in \Omega} \mathbb{P}(\omega)=1$.
+\item A Random Variable $X:\Omega \to \mathbb{R}$.
+\end{itemize}
+If $X$ and $Y$ are two random variables then their joint PMF\\
+ $\mathbb{P}_{X,Y}(x_i,y_j)=\mathbb{P}(X=x_i,Y=y_j)=\mathbb{P}(\{\omega : X(\omega)=x_i,Y(\omega)=y_j\})$
+\subsection{Simple Random Walks}
+$X_1,X_2,\dots$ is a sequence of i.i.d Ber($\frac{1}{2}$) random variables wherein for each $i$ we have:
+$$X_i=
+\begin{cases}
+1 &,\text{w.p } \frac{1}{2}\\
+-1 &,\text{w.p } \frac{1}{2}
+\end{cases}
+$$
+We consider the sequence of partial sums defined as $S_0=0$ and $S_n=X_n+S_{n-1}$.\\
+Clearly $|S_{i+1}-S_i|=1$ and knowing either the first $n$ sums or the values taken by the first $n$ random variables would readily determine the other.
+Each path has an equal probability of either going up or down. We wish to determine $\mathbb{P}(S_n=k)$.\\
+Let us denote $N_n(k)$ to be the number of paths ending at $k$ within the first $n$ steps. Clearly then, $$\mathbb{P}(S_n=k)=\frac{N_n(k)}{2^n}$$
+If we have $\alpha$ many $+1$'s and $\beta$ many $-1$'s, then clearly:
+$$\alpha+\beta=n,$$
+$$\alpha-\beta=k$$
+Solving these we get $\alpha=\frac{n+k}{2}$ and $\beta=\frac{n-k}{2}$. 
+Thus $N_n(k)=\binom{n}{\frac{n+k}{2}}$.
+Furthermore, if our paths start at $(b,a)$ and end at $(b',a')$ then the number of possible paths is $$\binom{b'-b}{\frac{b'-b+a'-a}{2}}$$
+Now we wish to find $\mathbb{P}(S_1>0,S_2>0,\dots,S_n=k)$. Let $N^{+}_n(k)$ denote the number of paths staying above the x-axis and reaching $k$ at the $n$-th step.\\
+We consider the number of paths from $(a,b)$ to $(a',b')$ that touch the x-axis. By the \textbf{Reflection Principle} we have that these paths map bijectively to those that go from $(a,-b)$ to $(a',b')$ with the part prior to the point of first touching the x-axis reflected.
+We also require that our first step is a $+1$. \\
+Then our required probability is:
+$$\mathbb{P}(S_1=1,S_n=k)-\mathbb{P}(S_1=1,S_n=k,S_i=0 \text{ for some }i\geq 2)$$
+The first probability is just $$\mathbb{P}(X_1=1)\mathbb{P}(X_2+\dots+X_n=k-1)=\frac{\binom{n-1}{\frac{n+k}{2}-1}}{2^n}$$
+and the second one is $$\frac{\binom{n-1}{\frac{n+k}{2}}}{2^n}$$
+and thus our required probability is:
+$$\frac{k}{n}\frac{\binom{n}{\frac{n+k}{2}}}{2^n}=\frac{k}{n}\mathbb{P}(S_n=k)$$
+Now we wish to find the probability that the first return to the x-axis occurs after the $2n$-th step. If this occurs at the $2m$-th step then we must reach 1 at the $(2m-1)$-th step 
+while staying above the x-axis. This can be done in $N^{+}_{2m-1}(1)$ ways and hence the required probability is:
+$$\sum_{m=n}^{\infty}\frac{\mathbb{P}(S_{2m-1}=1)}{2(2m-1)}$$ 
+which simplifies to $$\frac{N_{2n-1}(1)}{2^{2n-1}}$$
+Let's find the probability that the path never returns to 0. Since this sequence of events is decreasing, it is enough to take the limit of the probability we just found.
+$$\mathbb{P}(\text{Path never returns to }0)=\lim_{n\to\infty}\frac{\binom{2n}{n}}{2^{2n}}$$
+We employ Stirling's approximation: $n!\sim\sqrt{2\pi}n^{n+\frac{1}{2}}e^{-n}$,
+using which we obtain that our required limit is 0. Therefore 
+$$\mathbb{P}(\text{RW returns to 0})=1$$
+but it is important that the coin is fair, otherwise our random walk may never return to 0.\\
+Even while performing a random walk in the integer lattice, the probability that we return to the origin is 1. But for higher dimensions, the probability is strictly between 0 and 1. Dimensions 1 and 2 are called recurrent and the higher ones transient.
+\section*{Class 2, January 14 2026}
+Let $M_n$ denote the first time our random walk attains its maximum value. We have the following result:
+\begin{theorem}
+$\mathbb{P}(an\leq M_n \leq bn)\to\frac{2}{\pi}[\arcsin{\sqrt{b}}-\arcsin{\sqrt{a}}]$, where $a,b\in [0,1]$.
+\end{theorem}
+Limiting CDF of $\frac{M_n}{n}$ is$$F(t)=\frac{2}{\pi}\arcsin{\sqrt{t}}$$
+and thus, the limiting PDF
+$$f(t)=\frac{1}{\pi\sqrt{t(1-t)}}$$
+This is known as the Arcsine Law.\\
+\begin{proof}
+Fix $0<m<n$. We intend to find the probability $\mathbb{P}(M_n=m)$.
+This is equivalent to saying $S_m>S_0,\dots,S_m>S_{m-1}$ and $S_m\geq S_{m+1},\dots,S_m\geq S_n$, 
+and thus our probability simplifies to
+$$\mathbb{P}(M_n=m)=\mathbb{P}(S_m>S_0,\dots,S_m>S_{m-1})\mathbb{P}(S_m\geq S_{m+1},\dots,S_m\geq S_n)$$
+We use the following result we had seen earlier
+\begin{lemma}[Basic Lemma]
+    $\mathbb{P}(S_1\neq 0,\dots, S_{2\nu}\neq 0)=\mathbb{P}(S_{2\nu}=0)$
+\end{lemma}
+and thus $\mathbb{P}(S_1>0,\dots,S_{2\nu}>0)=\frac{1}{2}\mathbb{P}(S_{2\nu}=0)$
+\end{proof}
+Now we wish to find $\tilde{M}_n$, the last time of attaining maximum. It would be convinient to look at the walk backwards, wherein we would get from the previous result
+$$\mathbb{P}(n-\tilde{M}_n\leq an)\to \frac{2}{\pi}\arcsin{\sqrt{a}}$$
+Consider now, a walk of length $n=2k$. We wish to find the probability that the last visit to the origin occurs at time $2\nu$.
+But this is simply
+$$\mathbb{P}(S_{2\nu}=0,S_{2\nu +1}\neq 0,\dots,S_{2k}\neq 0)=\mathbb{P}(S_{2\nu}=0)\mathbb{P}(S_{2\nu +1}\neq 0,\dots,S_{2k}\neq 0)$$
+Using the previous notation this is nothing but $u_{2\nu}u_{2k-2\nu}$.
+\section*{Class 3, January 16 2026}
+    Let $f_{2k}$ denote the probability that the first return to 0 happens at time $2k$.
+    But this can be written as
+    $$\mathbb{P}(S_1=1,S_2>0,\dots,S_{2k-1}=1,S_{2k}=0)+\mathbb{P}(S_1=-1,S_2<0,\dots,S_{2k-1}=-1,S_{2k}=0)$$
+By symmetry, both probabilities are the same and using the Ballot Theorem, we get that the required probability is
+$$2\frac{N^{+}_{2k-1}(1)}{2^{2k}}=\frac{\binom{2k-1}{k}}{(2k-1)2^{2k-1}}=\frac{u_{2k}}{2k-1}$$
+\begin{lemma}
+    $$u_{2n}=f_2 u_{2n-2}+\dots+f_{2n}u_0$$
+\end{lemma}
+\begin{proof}
+This is easy to see. Notice that
+$$\mathbb{P}(S_{2n}=0)=\sum_{k=1}^{n}\mathbb{P}(S_{2n}=0 \text{ }|\text{ first return occurs at time 2}k)f_{2k}$$
+wherein we condition on the time of first return to the origin.
+\end{proof}
+\begin{theorem}
+The probability that in the time interval 0 to $2n$, SRW spends 2k time units on the positive side and $2n-2k$ time units on the negative side is $$\alpha_{2k,2n}=u_{2k}u_{2n-2k}$$
+Therefore for $0<t<1$, 
+$$\mathbb{P}(\text{SRW spends}\leq tn \text{ time units on the positive side})\to \frac{2}{\pi}\arcsin{\sqrt{t}}$$
+\end{theorem}
+\begin{proof}
+ We define the following
+ $$b_{2k,2n}=\mathbb{P}(\text{RW of length 2}n\text{ has 2}k\text{ sides above x-axis})$$   
+Firstly, we see that $b_{2n,2n}=u_{2n}=\alpha_{2n,2n}$ and that $b_{0,2n}=\mathbb{P}(S_1\leq 0,\dots,S_{2n}\leq 0)=u_{2n}=\alpha_{0,2n}$
+Assume exactly $2k$ sides out of $2n$ are positive, $1\leq k \leq n-1$. Say that the first return to 0 is at time $2r<2n$. \\
+\textbf{Case 1:} SRW spends $2r$ time units in the positive side, clearly then $r\leq k$. And the path from $(2r,0)$ till time $2n$ has $2k-2r$ sides above the x-axis.
+The number of such paths is 
+$$\frac{1}{2}2^{2r}f_{2r}(2^{2n-2r}b_{2k-2r,2n-2r})$$
+\textbf{Case 2:} SRW spends $2r$ time units on the negative side. As a consequence, we see that $n-r\geq k$
+In this case, the number of such paths is
+$$\frac{1}{2}2^{2r}f_{2r}(2^{2n-2r}f_{2k,2n-2r})$$\\ \\
+
+Thus we have 
+$$b_{2k,2n}=\frac{1}{2}\sum_{r=1}^{k}f_{2r}b_{2k-2r,2n-2r}+\frac{1}{2}\sum_{r=1}^{n-k}f_{2r}b_{2k,2n-2r}$$
+We keep $k$ fixed and proceed by induction. Assume $b_{2k,2n}=\alpha_{2k,2n}$ for $n\leq N-1$.\\
+$$b_{2k,2N}=\frac{1}{2}\sum_{r=1}^{k}f_{2r}u_{2k-2r}u_{2N-2k}+\frac{1}{2}\sum_{k=1}^{n-k}f_{2r}u_{2k}u_{2N-2r-2k}$$
+$$=\frac{1}{2}u_{2N-2k}\sum_{r=1}^{k}f_{2r}u_{2k-2r}+\frac{1}{2}u_{2k}\sum_{r=1}^{N-k}f_{2r}u_{2N-2r-2k}$$
+$$=\frac{1}{2}u_{2N-2k}u_{2k}+\frac{1}{2}u_{2k}u_{2N-2k}$$
+$$=u_{2N-2k,2k}=\alpha_{2k,2N}$$
+\end{proof}
+\section*{Class 4, January 21 2026}
+\subsubsection*{Generating Functions}
+\begin{definition}
+    Let $\{a_n\}_{n\in\mathbb{N}}$ be a sequence of real numbers. Then the generating function of this sequence is 
+    $$A(x)=\sum_{n\geq 0}a_{n}x^n$$
+\end{definition}
+If the sequence is bounded, then the power series converges. So, $A^{'}(x)$ is defined for all $|x|<1$.
+If $X$ is a random variable taking values in $\{0,1,...\}$, then the probability generating function for this random variable is
+$$P(x)=\sum_{k\geq 0}p_{k}x^{k}$$
+where $p_k=\mathbb{P}(X=k)$. Clearly, this power series is absolutely convergent. We further define $q_j=\mathbb{P}(X>j)$. Then calculations show that 
+$$Q(x)=\frac{1-P(x)}{1-x}$$
+    We know from Probability I that $Q(1)=\mathbb{E}[X]$, but we would like to see how this follows from here.
+    We see that
+    $$P^{'}(x)=\sum_{k=1}^{\infty}kp_k x^{k-1}$$
+    and thus $P^{'}(1)\to \mathbb{E}[X]$. By the Mean Value Theorem, we have $Q(x)=P^{'}(x_{0}) \text{ where }x_0\in(x,1)$. So,
+    $$Q(1)=\lim_{x\to 1^{-}}Q(x)=\lim_{x\to 1^{-}}P^{'}(x)=\mathbb{E}[X]$$
+We could also compute the variance in terms of the generating function. \\
+\textbf{Exercise: }Find the variance in terms of the generating function.\\
+If we have two independent nonnegative integer valued random variables $X$ and $Y$, we have
+$$P_{X+Y}(s)=\mathbb{E}[s^{X+Y}]=\mathbb{E}[s^X]\mathbb{E}[s^Y]=P_X(s)P_Y(s)$$
+With this, we have that the coefficient of $s^{m+n}$ in the power series $P_{X+Y}(s)$ is $$\sum_{k=0}^{m+n}P_X(k)P_Y(m+n-k)$$ which is as expected.
+We call $C_k$ the convolution of the sequences $A_K$ and $B_k$ as the power series wherein the coefficient of $x^i$ in $C_k$ is 
+$$\sum_{k=0}^{i}a_k b_{i-k}$$
+and we denote $C_k$ as $A_k*B_k$. If we have three sequences $\{a_k\},\{b_k\},\{c_k\}$, then we will see that the convolution operation is commutative on all three of the sequences. Thus
+$$\{a_k\}*\{b_k\}=\{b_k\}*\{a_k\}$$ and $$\{a_k\}*(\{b_k\}*\{c_k\})=(\{a_k\}*\{b_k\})*\{c_k\}$$
+\textbf{Example 1: }Let us find the probability generating function $\text{Bin}(n,p)$. Firstly, the probability generating function for a Bernoulli random variable with parameter $p$ is $(1-p+px)$. Therefore, the probability generating fucntion for the Binomial Random Variable is $(1-p+px)^n$
+Similarly, one can see that if $X~\text{Bin}(n,p)$ and $Y~\text{Bin}(m,p)$ then $X+Y~\text{Bin}(m+n,p)$\\
+\\
+\textbf{Exercise 1 :} Find the probability generating function of $\text{Pois}(\lambda)$ and use it to find the sum of independent Poisson random variables.\\
+\textbf{Exercise 2:} Find the generating function of geometric random variables.\\
+\textbf{Exercise 3:} Find the probability generating function of negative binomial random variables.
+\section*{Class 8, January 23 2026}
+\subsection*{Applications of Generating Functions}
+We have a sequence of i.i.d random variables such that 
+$$X_i=
+\begin{cases}
++1\text{, w.p } p\\
+-1\text{, w.p } q=1-p\\
+\end{cases}$$
+And define $S_n=X_1+\dots+X_n$. Let us consider the event $$\{S_1\leq 0,\dots, S_{n-1}\leq 0,S_n=1\}$$
+Let $\Phi_n$ denote the probability of the above event, and consider
+$$\Phi(s)=\sum_{n\geq 0}\Phi_n s^n$$
+If the above event occurs for some event then $S_1=-1$. Let $\nu<n$ be the first time that this biased walk returns to the origin. 
+Then our event is 
+$$\{S_1=0,S_2\leq -1,\dots,S_{\nu -1}=-1,S_{\nu}=0\}$$
+and the rest of the walk is such that 
+$$\{S_{\nu}\leq 0,\dots,S_n=1\}$$
+This section of the walk depends only on the R.V.s $X_{\nu+1},\dots,X_n$. 
+Therefore,
+$$\Phi_n=\sum_{\nu=2}^{n-1}\mathbb{P}(S_1\leq 0,\dots,S_{\nu}=0)\mathbb{P}(S_{\nu +1}\leq 0,\dots,S_n=1)$$
+$$=\sum_{\nu=2}q\mathbb{P}_{-1}(S_1\leq -1,\dots,S_{\nu-1}=0)\mathbb{P}(S_{\nu}\leq 0,\dots, S_{n-\nu}=1)$$
+From this we get 
+$$\Phi_n=\sum_{\nu=2}^{n-1}q\Phi_{\nu -1}\Phi_{n-\nu}$$
+Thus $\Phi_n=q(\Phi*\Phi)_{n-1}$. As for the generating function,
+$$\Phi(s)=ps+\sum_{n\geq2}\Phi_s s^n=ps+qs\sum_{n\geq 2}\Phi_{n}s^n=ps+qs(\Phi(s))^2$$
+Therefore, 
+$$(\Phi(s))^2 qs-\Phi(s)+ps=0$$
+since this is a quadratic in $\Phi(s)$, we can solve for it to get
+$$\Phi(s)=\frac{1\pm \sqrt{1-4pqs^2}}{2qs}$$
+But we know that $\Phi(0)=0$ and by taking the limit as $s$ goes to 0, we find that this generating function must actually be 
+$$\frac{1-\sqrt{1-4pqs^2}}{2qs}$$
+which gives us that 
+$$\Phi_{2k-1}=\frac{(-1)^{k-1}}{2q}\binom{\frac{1}{2}}{k}(4pq)^k$$
+ and $$\Phi_{2k}=0$$
+As a result of this, 
+$$\Phi(1)=\sum_{n\geq 0}\Phi_{n}=\frac{1-\sqrt{1-4pq}}{2q}=\frac{1-|p-q|}{2q}$$
+If $p\geq q$, then $$\Phi(1)=\frac{1-(p-q)}{2q}=1$$
+on the other hand, if $p<q$, then we get 
+$$\Phi(1)=\frac{1-q+p}{2q}=\frac{p}{q}$$
+So, if $p<q$, then 
+$$\mathbb{P}(\text{ walk never hits 1 })=1-\frac{p}{q}$$
+and if $p=q=\frac{1}{2}$, then $$\mathbb{P}(\text{ walk eventually returns to 1 })=1$$
+This suggests that if you are gambling with your friend by tossing a fair coin, then eventually you'd be filthy rich. Right?\\
+Well, here's the thing. We must find the expected time that the walk hits 1. Let us generalize; we consider $p$ and $q$ as defined above. Then the expected time of hitting 1 is $1/(p-q)$ if $p>q$. But in the case that $p=q=\frac{1}{2}$, the expected time blows up to infinity. So expect to wait for a very long time or rather get hold of infinite capital. But then again, why would you gamble if you had so much money?
+\section*{Class 9, January 30 2026}
+\subsection*{Simple Random Walk}
+We consider a simple random walk on $\mathbb{Z}^d$; ie. the d-dimensional lattice. We have a total of $2d$ choices at each step (two along each axis).
+We want to find the probability that the walk returns to the origin. 
+As in the one-dimensional random walk we consider $u_{2n}$ to be the probability that the walk returns to the origin at the $2n$-th step and let $f_{2n}$ be the probability that the walk returns to the origin for the first time at the $2n$-th step.
+Therefore, again as before we have:
+$$u_{2n}=\sum_{k=1}^n u_{2n-2k}f_{2k}$$
+and letting $$U(s)=\sum_{n=0}^{\infty}u_{2n}s^{2n}$$ and 
+$$F(s)=\sum_{n=0}^{\infty}f_{2n}s^{2n}$$
+we get that 
+$$U(s)=1+\sum_{n=1}^{\infty}\big{(}\sum_{k=1}^n u_{2n-2k}f_{2k}\big{)}s^{2n}$$
+which simplifies to:
+$$U(s)=\frac{1}{1-F(s)}$$
+We note that $F(1)$ is the probability that we eventually return to the origin. Due to this, we can say the following:
+$$\lim_{s\to1}U(s)=\infty$$ 
+iff $F(1)=1$. But $U(1)=\sum_{n=1}^{\infty}u_{2n}$. It would be enough to compute $u_{2n}$. \\ \\ 
+When $d=2$, we choose the positions where we are going to move along the x-axis. and then we count the number of paths along the x-axis and the rest will be along the y-axis. From this we get 
+$$u_{2n}=\frac{\sum_{k=1}^{n}\binom{2n}{2k}\binom{2k}{k}\binom{2n-2k}{n-k}}{4^{2n}}$$
+which comes out to be $$\frac{\binom{2n}{n}^2}{4^{2n}}$$
+Using Stirling's Approximation we find that $u_{2n}\sim \frac{1}{\pi n}$. Thus, this series diverges. And hence $F(1)=1$ and thus the random walk is recurrent in 2 dimensions.\\
+For $d=3$, we consider a similar setting wherein we move along 3 axes now. 
+For this we have:
+$$u_{2n}=\binom{2n}{n}2^{-2n}\sum_{j+k\leq n}\big{(}\frac{n!}{j!k!(n-j-k)!}3^{-n}\big{)}^2$$
+$$\leq \binom{2n}{n}2^{-2n}\big{(}\max_{j+k\leq n}\frac{n!}{j!k!(n-j-k)!}3^{-n}\big{)}\sum_{j,k}\frac{n!}{j!k!(n-j-k)!}3^{-n}$$
+We can check that the max is attained for $j,k \approx \frac{n}{3}$. This finally gives us that the random walk is transient in 3 dimensions.
+\begin{theorem}[Polya's Theorem]
+    SRW is recurrent for $d=2$ and transient for $d\geq 3$.
+    
+\end{theorem}
+\textbf{Exercise:} Verify Polya's Theorem using a neat argument.
+\section*{Class 10, February 6 2026}
+\subsection*{Continuity Theorem}
+For each $n$, the sequence $a_{0,n},a_{1,n},\dots$ is a probability distribution and thus $a_{k,n}\geq 0$ and $$\sum_{k=0}^{\infty}a_{k,n}=1$$
+\begin{theorem}
+    $a_k=\lim_{n\to\infty}a_{k,n}$ exists for all $k\geq 0 \iff$ The limit $A(s)=\lim_{n\to\infty}\sum_{k=0}^{\infty}a_{k,n}s^k$ exists for each $0<s<1$.
+\end{theorem}
+\begin{proof}
+        $A_{n}(s)=\sum_{k=0}^{\infty}a_{k,n}s^k$. Assume the first statement. We want to show that $\lim_{n\to\infty}A_{n}(s)$ exists.
+        Now 
+        $$A_{n}(s)=\sum_{k=0}^{N}a_{k,n}s^{k}+\sum_{k=N+1}^{\infty}a_{k,n}s^{k}$$
+        and $$\sum_{k=0}^{N}a_{k,n}s^k\leq A_n(s)\leq \sum_{k=0}^{N}a_{k,n}s^k +\frac{s^{N+1}}{1-s}$$
+$$\sum_{k=0}^{N}a_{k,n}s^k\leq \liminf{n\to\infty}A_{n}(s)\leq \limsup_{n\to\infty}A_{n}(s)$$
+Choosing $N$, large enough, we are done.\\
+Next, we assume the second statement. Let us show that $a_{0,n}$ converges. Firstly, we note that $A(s)$ is monotonic in $s$ and $A(0)=\lim_{s\to 0}A(s)$. Furthermore,
+$$a_{0,n}\leq A_{n}(s)\leq a_{0,n}+\frac{s}{1-s}$$ 
+and $$A_{n}(s)-\frac{s}{1-s}\leq a_{0,n}\leq A_{n}(s)$$
+Now,
+$$A(s)-\frac{s}{1-s}\leq \liminf_{n\to\infty}a_{0,n}\leq \limsup_{n\to\infty}a_{0,n}\leq A(s)$$
+Letting $s\to 0$, we get that LHS and RHS are the same. Therefore, $\lim_{n\to\infty}a_{0,n}$ exists.
+Let 
+$$B_{n}(s)=\frac{A_{n}(s)-a_{0,,n}}{s}=\sum_{k=1}^{\infty}a_{k,n}s^{k-1}$$
+And we can carry out the same procedure as before to get the similar result for $a_{1,n}$.
+\end{proof}
+\subsection*{Some consequences of the continuity theorem}
+We have a sequence of random variables $\{X_n\}$ such that $X_n ~ \text{Bin}(n,p_n)$ and if $np_n\to \lambda$ then 
+$$\mathbb{P}(X_n =k)\to \mathbb{P}(\text{Pois}(\lambda)=k)$$ Now the generating function for $X_n$ is 
+$$[1+p_n(1-s)]^n=[1+\frac{np_n(1-s)}{n}]^n\to e^{\lambda(s-1)}$$
+Next we consider $X_n ~ \text{NB}(r_n,p_n)$. Suppose $p_n\to 1$, $r_n\to\infty$ such that $r_n(1-p_n)\to \lambda$. Then $$\mathbb{P}(X_n =k)\to \mathbb{P}(\text{Pois}(\lambda)=k)$$                                                                                                                                                                                                         
+\begin{proof}
+    We know that the generating function for $X_n$ is 
+    $$\big{(}\frac{p_n}{1-(1-p_n)s}\big{)}^{r_n}$$
+        We can write this as $$e^{r_n[\log{(1-(1-p_n))}-\log{(1-(1-p_n)s)}]}$$
+        Applying, the Taylor expansion for $\log{(1-x)}$ we get our desired result.
+
+    \end{proof}
+\section*{Class 11, February 12 2026}
+We consider a random walk starting at $z$ with probability $p$ of going to the right and $q$ of going to the left. The gambler would win if he hits $a$ but he loses if he hits zero first.
+We want to find the probability that the gambler hits 0 before hitting $a$. Let $q_z$ be the probability for that event and let $p_z$ be the probability that he hits $a$ before hitting 0.  We condition on the first jump.
+$$q_z=pq_{z+1}+qq_{z-1}$$ 
+with the initial conditions that $q_0=1$ and $q_a=1$. We find that
+$$q(q_z-q_{z-1})=p(q_{z+1}-q_z)$$ 
+$$\implies q_a-q_0=\sum_{i=1}^{a}\left(\frac{q}{p}\right)^{i-1}(q_1-q_0)$$
+$$\implies -1=\begin{cases}
+a(q_1-q_0),\text{ if }p=q=\frac{1}{2}\\
+\frac{\left(\frac{q}{p}\right)^a -1}{\frac{q}{p} -1}(q_1-q_0 )\text{, otherwise}
+\end{cases}$$
+Thus
+$$q_z=\begin{cases}
+1-\frac{z}{a}\text{, if }p=q=\frac{1}{2}\\
+\frac{\left(\frac{q}{p}\right)^a -\left(\frac{q}{p}\right)^{z}}{\left(\frac{q}{p}\right)^a -1}\text{, otherwise}
+\end{cases}$$
+Due to symmetry, one could flip the roles for $p$ and $q$ to get that $p_z+q_z=1$.
+\\After $a-1$ steps, $\mathbb{P}(\text{walk is out of interval})\geq p^{a-1}$. If we're out, then good. If not, consider next $a-1$ steps. Again we have the same probability of getting out. Thus intuitively, we have infinitely many attempts to make $a-1$ moves. Thus the walk will eventually get out.
+If we have the probability for success being $p$ and that of failure being $p$, then the probability that we fail $k$-times before succeeding is $q^k p$. Thus we probability that we fail forever is 
+$$1-p\sum_{k=0}^{\infty}q^k=0$$
+So we must eventually succeed. When $a\to \infty$, we have that $q_z\to 1$.
+But when $q<p$, there is a positive chance we may never hit 0.
+
+
+
+
+
+
+\end{document}
+
+
+

@@ -1,0 +1,131 @@
+---
+title: "ISCD Worksheet 5.ii"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+1.
+
+```{r}
+set.seed(100)
+n=10000
+A=rpois(n,6)
+B=rpois(n,3)
+C=rpois(n,3)
+d=B^2 - 4*A*C
+p=length(d[d>=0])/n
+p
+```
+
+2. a)
+
+i) 
+
+```{r}
+x=c(1,2,3,4)
+cumsum(x)
+```
+
+This function finds the cumulative sum of the entries in the vector and creates a vector out of them.
+
+ii)
+
+```{r}
+runningmean=function(x,N){
+    y=sample(x,N,replace=T)
+    c=cumsum(y)
+    n=1:N
+    c/n
+}
+runningmean(c(1,2,3,4,5),10)
+```
+
+The runningmean function is taking N samples from a vector x with replacement and is thus creating a sequence y1,y2,...yN. Then it calculates the cumulative mean of this vector sequence ie. mean of the first term, mean of first two terms, and so on till the mean of the whole vector.
+
+iii) 
+
+```{r}
+runningmean=function(x,N){
+    y=sample(x,N,replace=T)
+    c=cumsum(y)
+    n=1:N
+    c/n
+}
+u=runningmean(c(0,1),1000)
+v=1:1000; plot(u~v,type="l");
+```
+
+This plot shows that as the number of cumulative means increases, its value, though fluctuating a lot at the start, eventually stabilizes to a value quite close to 0.5.
+
+iv)
+
+```{r}
+runningmean=function(x,N){
+    y=sample(x,N,replace=T)
+    c=cumsum(y)
+    n=1:N
+    c/n
+}
+v=1:1000
+plot(runningmean(c(0,1),1000) ~ v,type = "l", ylim = c(0,1))
+replicate(10,lines(runningmean(c(0,1),1000)~v,type="l"))
+```
+
+v)
+
+```{r}
+library(viridisLite)
+runningmean = function(x, N){
+  y = sample(x, N, replace = TRUE)
+  c = cumsum(y)
+  n = 1:N
+  c / n
+}
+v = 1:1000
+cols = viridis(10)   
+plot(runningmean(c(0,1), 1000) ~ v,
+     type = "l",
+     col = cols[1],
+     ylim = c(0,1),
+     xlab = "Number of tosses",
+     ylab = "Running mean")
+for(i in 2:10){
+  lines(runningmean(c(0,1), 1000) ~ v, col = cols[i])
+}
+abline(h = 0.5, lty = 2)
+```
+
+b)
+
+i)
+
+```{r}
+set.seed(1)
+p_hat = replicate(100, {
+  x = rbinom(1000, 1, 0.5)   
+  mean(x)                  
+})
+p_hat
+```
+
+ii)
+
+```{r}
+error = p_hat - 0.5
+hist(error,
+     breaks = 15,
+     main = expression(hat(p)[1000] - 1/2),
+     xlab = "Error")
+```
+
+iii)
+
+```{r}
+std_error = (p_hat - 0.5) / (1 / (2 * sqrt(1000)))
+hist(std_error,
+     breaks = 15,
+     main = "Standardised error",
+     xlab = "Value")
+```
+
+iv) The standardised error seems to follow approximately a normal distribution, as is seen from the graph. This is my guess.

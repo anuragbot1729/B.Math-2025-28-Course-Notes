@@ -1,0 +1,7 @@
+---
+title: "ISCD Homework 5"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+3. b) From the solution of the previous part, we find that the M.L.E for a set of n Bernoulli samples is just the sample mean.

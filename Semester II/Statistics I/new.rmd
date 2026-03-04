@@ -1,0 +1,50 @@
+---
+title: "R Scribbles"
+author: "Anurag (bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(viridisLite)
+```
+
+```{r}
+x=rpois(100,10)
+p1=prop.table(table(x))
+#Empirical PMF
+barplot(height=p1,xlab="X",ylab="Probability",main="Empirical PMF")
+x1=min(x):max(x)
+p2=dpois(x1,10)
+plot(x1,p2,xlab="X",ylab="Probability",main="Theoretical PMF")
+y1=ecdf(x)
+y2=ppois(x1,10)
+plot(y1,main="Empirical CDF")
+plot(x1,y2,main="Theoretical CDF")
+```
+
+```{r}
+#Various types of plots in R
+#Regular plot function normally gives a scatter plot and if one mentions type="l" then it draws a line plot
+#If one wants a histogram 
+x=rnorm(100)
+#If you want to mention the number of bins
+hist(x,main="Normal samples",breaks=5)
+y=rnorm(1000)
+#Here break mentions the endpoints of each interval
+hist(y,breaks=seq(-5,5,by=0.1),main="More normal samples")
+#Creating a boxplot
+x=sample(1:100,1000,replace=TRUE)
+boxplot(x,main="Boxplot")
+#Boxplot from a given dataset here the boxes are made for each individual cylinder type
+boxplot(mpg~cyl,data=mtcars)
+#Summarising a given dataset; the below example creates a summary for each category
+summary(mtcars)
+#If we only want a summary for a given category we do the following
+summary(mtcars$disp)
+#Density plot; draws a smoothed histogram to emulate the pdf of the given distribution
+x=rnorm(100)
+plot(density(x),main="Density plot for Normal samples")
+x=sample(1:10,100,replace=TRUE)
+plot(density(x),main="Density plot for discrete samples")
+```

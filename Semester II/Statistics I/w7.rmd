@@ -1,0 +1,71 @@
+---
+title: "ISCD Worksheet 7"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+1. b)
+
+```{r}
+n=10
+#i.
+x=runif(n,0,7)
+y=numeric(n)
+c=1
+for(i in x){
+    f=(16+sin(i))/(i^2 +4)
+    y[c]=f
+    c=c+1
+}
+sum(y)/n
+#ii.
+n=50
+sim=replicate(n,{
+   x=runif(n,0,7)
+   y=numeric(n)
+   c=1
+   for(i in x){
+    f=(16+sin(i))/(i^2 +4)
+    y[c]=f
+    c=c+1
+    }
+    mean(y) 
+})
+7*mean(sim)
+```
+
+c)
+
+```{r}
+f=function(x) (16+sin(x))/(x^2 +4)
+integrate(f,0,7)
+```
+
+2.
+
+b)
+
+```{r}
+x=rhyper(100,50,0,20)
+x
+```
+
+d)
+
+```{r}
+N=c(50,100,200,300,400,500);
+lm=numeric(length(N));
+lv=numeric(length(N));
+c=1;
+for(i in N){
+    x=rhyper(1000,50,i-50,20);
+    y=1000/x[x!=0];
+    m=mean(y);
+    v=var(y);
+    lm[c]=m;
+    lv[c]=v;
+    c=c+1
+}
+plot(N,lm,type="l",main="Mean sample size");
+plot(N,lv,type="l",main="Variance of sample size");
+```

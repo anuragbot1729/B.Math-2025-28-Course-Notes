@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}
+\title{Statistics I Notes}
+\author{
+\begin{tabular}{c}
+Anurag (bmat2508@isibang.ac.in)\\[0.6em]
+Instructor: Siva Athreya
+\end{tabular}
+}
+\date{}
+\begin{document}
+\maketitle
+If $X_1,\dots,X_n \sim \mathcal{N}(p,1)$. Then
+$$\bar{x}\sim \mathcal{N}(p,\frac{1}{n})$$
+and thus
+$$\sqrt{n}(\bar{x}-p)\sim\mathcal{N}(0,1)$$
+Since $\Phi(3)-\Phi(-3)=0.997$, therefore
+$$\mathbb{P}(p\in(\hat{p}-\frac{3}{\sqrt{n}},\hat{p}+\frac{3}{\sqrt{n}}))=0.997$$
+This is known as a 99\% confidence interval.
+Thus we find that regardless of the value of $p$, $T(X_1,\dots,X_n,p)=\sqrt{n}(\hat{p}-p)$ has  a completely known distribution.
+Thus $\sqrt{n}(\hat{p}-p)\overset{d}{=}\mathcal{N}(0,1)$ is parameter free. Furthermore, in order to find the $\alpha\%$ confidence interval, we find $z_{\alpha}$ such that
+$$\mathbb{P}(|\sqrt{n}(\hat{p}-p)|\leq z_{\alpha})=\frac{\alpha}{100}$$
+\section*{Pivotal Quantity-Exponential}
+Let $\lambda>0$ and $(X_1,\dots,X_n)$ be an i.i.d sample from an Exponential population with rate $\lambda$. We want to find a confidence interval for $\lambda$. We take
+$$T(X_1,\dots,X_n,\lambda)=n\lambda\bar{X}=\lambda \left(\sum_{i=1}^n X_i\right)$$
+Thus, in order to find an $\alpha\%$ confidence interval just take $a,b>0$ such that 
+$$\mathbb{P}(a<n\lambda\bar{X}<b)=\frac{\alpha}{100}$$
+\section*{Pivotal Quantity-Uniform}
+Suppose $X_1,\dots,X_n$  be i.i.d Uniform($0,\theta$) and let
+$$X_{(n)}=\max{(X_1,\dots,X_n)}$$
+ Let $x\in\mathbb{R}$. Then $$\mathbb{P}(X_{(n)}\leq x)=(\mathbb{P}(X_1\leq x))^n$$
+ Differentiating w.r.t $x$ gives
+ $$f_{X_{(n)}}(x)=n f_{X_1}(x)\left(F_{X_1}(x)\right)^{n-1}=
+ \begin{cases}
+ 0\text{, if } x<0 \text{ or }x>\theta\\
+ \frac{n}{\theta}\left(\frac{x}{\theta}\right)^{n-1}\text{ otherwise}
+ \end{cases}$$
+If we instead take $\frac{X_{(n)}}{\theta}$, we find that our PDF is parameter free now. The last term becomes $nx^{n-1}$. This is the Beta($n,1$) distribution.
+1`'
+
+
+
+\end{document}

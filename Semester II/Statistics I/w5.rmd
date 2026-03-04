@@ -1,0 +1,40 @@
+---
+title: "ISCD Worksheet 5"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+1. 
+
+```{r}
+x=c(3,4,2,5,2,4,4,6,3,4)
+y=ecdf(x)
+plot(ecdf(x),main="Empirical Distribution")
+```
+
+2.
+
+```{r}
+replicate(10, {
+  u=runif(10000)
+  v=runif(10000)
+  z=sqrt(u^2+v^2)
+  sum(z<1)/10000
+})
+```
+ This code takes 10000 points from the unit interval [0,1] once each for u and v. Then it computes the proportion of those points such that (u,v) is less than a unit distance apart from the origin. It is equivalent to solving an integral which comes out to be pi/4. In this case as well, that proportion is quite close to the theoretical value. 
+ Yes, the code can be modified, just multiplying the proportion by 4 would give us an approximate value of pi.
+
+3.
+
+```{r}
+L=function(p){
+    N=45
+    x=26
+    choose(N,x)*p^x*(1-p)^(N-x)
+}
+plot(L,from=0,to=1)
+optimize(L,interval=c(0,1),maximum=TRUE)
+```
+
+This code is first creating a function to compute the probability that a binomial random variable with parameters 45 and p would take the value 26. Then it plots the function from 0 to 1. Finally, the optimize bit of the code is showing the value of p at which the likelihood gets maximised and it also returns the maximum value of that likelihood.

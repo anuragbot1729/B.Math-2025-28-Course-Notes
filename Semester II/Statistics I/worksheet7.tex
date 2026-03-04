@@ -1,0 +1,21 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\title{ISCD Worksheet 7}
+\author{
+\begin{tabular}{c}
+Anurag Bhunia (bmat2508@isibang.ac.in)\\[0.6em]
+\end{tabular}
+}
+\date{}
+\begin{document}
+\maketitle
+1.a $$\frac{1}{b-a}\int_a^b f(x)dx$$
+This represents the expected value of $f(x)$ in the interval $[a,b]$ where $f(X)$ is such that $X$ is a Uniform($a,b$) random variable. Now, if we pick $n$ samples $X_1,\dots X_n$ uniformly from $(a,b)$, then $$\frac{1}{n}\sum_{i=1}^{n}f(X_i)$$ is the average value of $f$ evaluated at those sample points. Then using the Weak Law of Large Numbers, we can say that as the sample size increases, the sample mean gets closer to the expected value. So the probability that they will be farther than some arbitrary $\epsilon$ for a large enough $n$ goes to 0.
+Thus $$\mathbb{P}\left(|\frac{1}{n}\sum_{i=1}^{n}f(X_i)-\frac{1}{b-a}\int_a^b f(x)dx|>\epsilon\right)\to 0$$  
+\\ \\ \\
+2.a Since we have a total of $N$ fishes of which $50$ are marked, now if we pick 20 of them then 
+$$\mathbb{P}(X=k)=\frac{\binom{50}{k}\binom{N-50}{20-k}}{\binom{N}{20}}$$
+Thus $X$ follows the Hypergeometric$(N,50,20)$ distribution.
+\\
+2.c $$\frac{50}{N}=\frac{X}{20}\implies \hat{N}=\frac{1000}{X}$$
+\end{document}

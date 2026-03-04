@@ -1,0 +1,30 @@
+---
+title: "ISCD Homework 3"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(viridisLite)
+```
+
+**Question 1**
+
+I will create a plot based on the following variables: Meeting Topic, Duration, Participants and Venue.
+
+```{r}
+setwd("/home/anurag/Documents/Suppandi")
+df=read.csv("SuppandiZoomLog.csv",header=T)
+df1=df[,c(1,4,5,6)]
+names(df1)[1]="Topic"
+names(df1)[2]="Duration"
+#Just to check
+head(df1)
+df1$Duration=as.numeric(df1$Duration)
+df1$Participants=as.numeric(df1$Participants)
+ggplot(df1,aes(x=Duration,y=Participants,linetype=Topic,colour=Topic))+geom_smooth(se=FALSE)+facet_wrap(~Venue,ncol=3)+scale_colour_viridis_d(option="Plasma")+labs(title="Suppandi Zoom Log")
+
+```
+
+This plot shows how the duration of a meet affects the number of participants and also compares them across different topics to see which one seems to have had the most appeal. We divide the plot based on the venue.

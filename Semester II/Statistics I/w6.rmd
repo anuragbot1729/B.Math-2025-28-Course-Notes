@@ -1,0 +1,171 @@
+---
+title: "ISCD Worksheet 6"
+author: "Anurag Bhunia(bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+```{r,include=FALSE}
+corners_T <- matrix(c(0, 0,  1, 0,  0.5, sqrt(3)/2), ncol = 2, byrow = TRUE)
+S1 <- function(point) point/ 2 + corners_T[1, ]/2  
+S2 <- function(point) point/2 + corners_T[2, ]/2   
+S3 <- function(point) point/2 + corners_T[3, ]/2  
+```
+
+1.
+
+a)
+
+```{r}
+S1_set <- function(points) t(apply(points, 1, S1))
+S2_set <- function(points) t(apply(points, 1, S2))
+S3_set <- function(points) t(apply(points, 1, S3))
+S1_corner <- S1_set(corners_T) 
+S2_corner <- S2_set(corners_T) 
+S3_corner <- S3_set(corners_T) 
+par(mfrow = c(2,2))
+plot(corners_T, pch = 19, 
+     xlab = "x", ylab = "y",  main = "Corners of T", asp = 1)
+plot(corners_T, pch = 19, xlab = "x", ylab = "y", 
+     main = "S1(corners)", type = "n", asp = 1)
+points(S1_corner, pch = 19)
+plot(corners_T, pch = 19, xlab = "x", ylab = "y", 
+     main = "S2(corners)", type = "n", asp = 1)
+points(S2_corner, pch = 19)
+plot(corners_T, pch = 19, xlab = "x", ylab = "y",
+     main = "S3(corners)", type = "n")
+points(S3_corner, pch = 19)
+```
+
+b)
+
+```{r}
+points_on_line <- function(a, b)
+{
+  lam <- seq(0, 1, length = 50)
+  t(sapply(lam, function(l) l*a + (1-l)*b))
+}
+l1 <- points_on_line(corners_T[1,], corners_T[2, ]) #
+l2 <- points_on_line(corners_T[1,], corners_T[3, ])
+l3 <- points_on_line(corners_T[2,], corners_T[3, ])
+edges_T <- rbind(l1, l2, l3)
+S1_edges <- S1_set(edges_T) 
+S2_edges <- S2_set(edges_T) 
+S3_edges <- S3_set(edges_T) 
+par(mfrow = c(2,2))
+plot(edges_T, pch = 19, 
+     xlab = "x", ylab = "y",  main = "Edges of T", asp = 1)
+plot(edges_T, pch = 19, xlab = "x", ylab = "y", 
+     main = "S1(edges)", type = "n", asp = 1)
+points(S1_edges, pch = 19)
+plot(edges_T, pch = 19, xlab = "x", ylab = "y", 
+     main = "S2(edges)", type = "n", asp = 1)
+points(S2_edges, pch = 19)
+plot(edges_T, pch = 19, xlab = "x", ylab = "y",
+     main = "S3(edges)", type = "n")
+points(S3_edges, pch = 19)
+```
+
+2.
+
+a)
+
+```{r}
+iterative_func <- function(set) rbind(S1_set(set), S2_set(set), S3_set(set))
+T0 <- corners_T
+T1 <- iterative_func(T0)
+T2 <- iterative_func(T1)
+T3 <- iterative_func(T2)
+T4 <- iterative_func(T3)
+T5 <- iterative_func(T4)
+par(mfrow = c(2,3))
+plot(T0, pch=20, cex=.7, main="T0 (Corners)", asp=1)
+plot(T1, pch=20, cex=.7, main="T1", asp=1)
+plot(T2, pch=20, cex=.7, main="T2", asp=1)
+plot(T3, pch=20, cex=.7, main="T3", asp=1)
+plot(T4, pch=20, cex=.7, main="T4", asp=1)
+plot(T5, pch=20, cex=.7, main="T5", asp=1)
+```
+
+c)
+
+```{r}
+T0 <- edges_T
+T1 <- iterative_func(T0)
+T2 <- iterative_func(T1)
+T3 <- iterative_func(T2)
+T4 <- iterative_func(T3)
+T5 <- iterative_func(T4)
+par(mfrow = c(2,3))
+plot(T0, pch=20, cex=.4, main="T0 (Edges)", asp=1,col=3)
+plot(T1, pch=20, cex=.4, main="T1", asp=1,col=3)
+plot(T2, pch=20, cex=.4, main="T2", asp=1,col=3)
+plot(T3, pch=20, cex=.4, main="T3", asp=1,col=3)
+plot(T4, pch=20, cex=.4, main="T4", asp=1,col=3)
+plot(T5, pch=20, cex=.4, main="T5", asp=1,col=3)
+```
+
+d)
+
+```{r}
+filling_T <- function(a, b, c)
+{
+  points <- NULL
+  lam1 <- seq(0, 1, length = 25)
+  lam2 <- seq(0, 1, length = 25)
+  for(l1 in lam1)
+  {
+    for(l2 in lam2)
+    {
+      if(l1 + l2 < 1)
+        points <- rbind(points,
+                        l1*a + l2*b + (1 - l1 - l2)*c)
+    }
+  }
+  points
+}
+points_T <- filling_T(corners_T[1,],
+                      corners_T[2,],
+                      corners_T[3,])
+T0 <- points_T
+T1 <- iterative_func(T0)
+T2 <- iterative_func(T1)
+T3 <- iterative_func(T2)
+T4 <- iterative_func(T3)
+T5 <- iterative_func(T4)
+par(mfrow = c(2,3))
+plot(T0, pch=20, cex=.3, main="T0 (Full)", asp=1,col=2)
+plot(T1, pch=20, cex=.3, main="T1", asp=1,col=2)
+plot(T2, pch=20, cex=.3, main="T2", asp=1,col=2)
+plot(T3, pch=20, cex=.3, main="T3", asp=1,col=2)
+plot(T4, pch=20, cex=.3, main="T4", asp=1,col=2)
+plot(T5, pch=20, cex=.3, main="T5", asp=1,col=2)
+```
+
+3.
+
+```{r}
+affine_map <- function(points, h, centroid_new, theta)
+{
+  R <- matrix(c(cos(theta), -sin(theta),
+                sin(theta),  cos(theta)),
+              nrow = 2, byrow = TRUE)
+  L <- h * R
+  centroid_old <- c(1/2, 1/(2*sqrt(3)))
+  u <- centroid_new - L %*% centroid_old
+  t(ap`ply(points, 1, function(x) L %*% x + u))
+}
+T_centered <- affine_map(T5,
+                          h = 1,
+                          centroid_new = c(0,0),
+                          theta = 0)
+
+plot(T_centered, pch=20, cex=.3,
+     main="Centered at (0,0)", asp=1,col=4)
+T_transformed <- affine_map(T5,
+                             h = 0.5,
+                             centroid_new = c(5,3),
+                             theta = pi/6)
+
+plot(T_transformed, pch=20, cex=.3,
+     main="Scaled, Rotated, Moved", asp=1,col=4)
+```

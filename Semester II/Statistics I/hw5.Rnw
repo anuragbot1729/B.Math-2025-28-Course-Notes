@@ -1,0 +1,214 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\title{ISCD Homework 5}
+\author{
+\begin{tabular}{c}
+Anurag Bhunia (bmat2508@isibang.ac.in)\\[0.6em]
+\end{tabular}
+}
+\date{}
+%%%%%%%%%%%%%%%Setting Page Sizes %%%%%%%%%%%%
+\setlength{\parindent}{0in}
+\setlength{\parskip}{\baselineskip}
+\setlength{\textheight}{9in}
+\setlength{\textwidth}{6.3in}
+\setlength{\topmargin}{-0.6in}
+\setlength{\evensidemargin}{-.5in}
+\setlength{\oddsidemargin}{0in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%To make R commands appear in different Color%%%%%%%%%%
+\usepackage{color}
+\usepackage{fancyvrb} % Verbatim
+\usepackage{color}
+\definecolor{codecolor}{RGB}{114,12,112}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{formatcom=\color{codecolor}}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{formatcom=\color{codecolor}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{formatcom=\color{codecolor}}
+\DefineVerbatimEnvironment{Sin}{Verbatim}{formatcom=\color{codecolor}}
+\DefineVerbatimEnvironment{Sout}{Verbatim}{formatcom=\color{codecolor}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+1. Given that $X_1,\dots,X_n$ are i.i.d $\mathcal{N}(\mu,\sigma^2)$.
+The joint density function of the sample is
+\[
+f(x_1,\ldots,x_n \mid \mu,\sigma^2)
+= \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\!\left(-\frac{(x_i-\mu)^2}{2\sigma^2}\right)
+\]
+
+This product is the likelihood function
+\[
+L(\mu,\sigma^2)
+= (2\pi\sigma^2)^{-n/2}
+\exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n (x_i-\mu)^2\right)
+\]
+
+Taking logarithms gives the log-likelihood
+\[
+\ell(\mu,\sigma^2)
+= -\frac{n}{2}\log(2\pi)
+-\frac{n}{2}\log(\sigma^2)
+-\frac{1}{2\sigma^2}\sum_{i=1}^n (x_i-\mu)^2
+\]
+
+To find the maximum likelihood estimator of $\mu$, we differentiate with respect to $\mu$
+\[
+\frac{\partial \ell}{\partial \mu}
+= \frac{1}{\sigma^2}\sum_{i=1}^n (x_i-\mu)
+\]
+
+Setting this derivative equal to zero gives
+\[
+\sum_{i=1}^n (x_i-\mu)=0
+\]
+
+Solving for $\mu$ yields
+\[
+\hat{\mu}=\frac{1}{n}\sum_{i=1}^n x_i
+\]
+
+Next, we differentiate the log-likelihood with respect to $\sigma^2$
+\[
+\frac{\partial \ell}{\partial \sigma^2}
+= -\frac{n}{2\sigma^2}
++\frac{1}{2(\sigma^2)^2}\sum_{i=1}^n (x_i-\mu)^2
+\]
+
+Setting this equal to zero gives
+\[
+-\frac{n}{2\sigma^2}
++\frac{1}{2(\sigma^2)^2}\sum_{i=1}^n (x_i-\mu)^2=0
+\]
+
+Multiplying both sides by $2(\sigma^2)^2$ yields
+\[
+-n\sigma^2+\sum_{i=1}^n (x_i-\mu)^2=0
+\]
+
+Solving for $\sigma^2$ gives
+\[
+\hat{\sigma}^2=\frac{1}{n}\sum_{i=1}^n (x_i-\mu)^2
+\]
+
+Substituting $\hat{\mu}$ into this expression yields the maximum likelihood estimator
+\[
+\hat{\sigma}^2=\frac{1}{n}\sum_{i=1}^n (x_i-\bar{x})^2
+\]
+Thus $\hat{\mu}$ is the sample mean and $\hat{\sigma^2}$ is the sample variance.\\ \\ \\
+2. We are given that $X_1,\dots,X_n$ are i.i.d Pois($\lambda$).
+The probability mass function of a Poisson random variable is
+\[
+\mathbb{P}(X=x)=\frac{e^{-\lambda}\lambda^x}{x!}, \quad x=0,1,2,\ldots
+\]
+
+The joint probability mass function of the sample is
+\[
+f(x_1,\ldots,x_n \mid \lambda)
+= \prod_{i=1}^n \frac{e^{-\lambda}\lambda^{x_i}}{x_i!}
+\]
+
+This product is the likelihood function
+\[
+L(\lambda)
+= e^{-n\lambda}\lambda^{\sum_{i=1}^n x_i}\prod_{i=1}^n \frac{1}{x_i!}
+\]
+
+Taking logarithms gives the log-likelihood
+\[
+\ell(\lambda)
+= -n\lambda + \left(\sum_{i=1}^n x_i\right)\log\lambda
+- \sum_{i=1}^n \log(x_i!)
+\]
+
+To find the maximum likelihood estimator, we differentiate with respect to $\lambda$
+\[
+\frac{d\ell}{d\lambda}
+= -n + \frac{1}{\lambda}\sum_{i=1}^n x_i
+\]
+
+Setting this derivative equal to zero gives
+\[
+-n + \frac{1}{\lambda}\sum_{i=1}^n x_i = 0
+\]
+
+Solving for $\lambda$ yields
+\[
+\hat{\lambda} = \frac{1}{n}\sum_{i=1}^n x_i
+\]
+
+Thus the maximum likelihood estimator of $\lambda$ is the sample mean
+\[
+\hat{\lambda} = \bar{x}
+\]
+\\ \\ \\
+3. a) We have the following 5 samples $0,0,0,0,1$. We note that they are all indepedent since the outcome of one toss does not depend on the prior ones. They are identically distributed as well since we are using the same coin. Since the outcome of a coin toss follows a Bernoulli distribution, we find the maximum likelihood estimation for $n$ i.i.d Bernoulli samples $X_1,\dots,X_n$. Suppose the parameter for their distribution is $p$. Then considering the log-likelihood
+$$\ell(p)=\log{p}\sum_{i=1}^{n}x_i+\log{(1-p)}\sum_{i=1}^n (1-x_i)$$
+Differentiating with respect to $p$ and setting this to 0 we find 
+$$\frac{1}{p}\sum_{i=1}^n x_i+\frac{1}{p-1}\left(n-\sum_{i=1}^n x_i\right)=0$$
+solving this, we find 
+$$\hat{p}=\frac{1}{n}\sum_{i=1}^n x_i$$
+Thus the maximum likelihood estimation for $p$ is just the sample mean. In the case for our problem, this turns out to be $\frac{1}{5}$.
+\\ \\ \\
+b)
+<<>>=
+#Suppose we set N to be 5
+N=5
+likelihood=function(p){
+  p*(1-p)^(N-1)
+}
+optimize(likelihood,c(0,1),maximum=TRUE)
+@
+
+4. 
+<<>>=
+set.seed(1)
+x <- rpois(100, 10)
+freq <- table(x)
+emp_pmf <- prop.table(freq)
+k <- as.numeric(names(emp_pmf))
+true_pmf <- dpois(k, 10)
+plot(k, emp_pmf,
+     type = "h",
+     lwd = 3,
+     xlab = "k",
+     ylab = "Probability",
+     main = "Empirical PMF vs True Poisson(10) PMF")
+points(k, true_pmf,
+       pch = 19,
+       col = "red")
+legend("topright",
+       legend = c("Empirical PMF", "True PMF"),
+       lwd = c(3, NA),
+       pch = c(NA, 19),
+       col = c("black", "red"))
+
+emp_cdf <- ecdf(x)
+plot(emp_cdf,
+     main = "Empirical CDF vs True Poisson(10) CDF",
+     xlab = "x",
+     ylab = "F(x)")
+curve(ppois(x, 10),
+      col = "red",
+      lwd = 2,
+      add = TRUE)
+legend("bottomright",
+       legend = c("Empirical CDF", "True CDF"),
+       lwd = 2,
+       col = c("black", "red"))
+@
+
+
+
+
+
+\end{document}      
+
+
+
+
+
+
+
+
+

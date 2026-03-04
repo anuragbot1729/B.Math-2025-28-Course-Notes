@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,amsthm}
+\title{ISCD Homeowork 6}
+\author{
+\begin{tabular}{c}
+Anurag Bhunia(bmat2508@isibang.ac.in)\\[0.6em]
+\end{tabular}
+}
+\date{}
+\begin{document}
+\maketitle
+3. We are given that $X_1,\dots,X_n$ are i.i.d Uniform($a,b$) for some $a,b$. We compute the first two moments: 
+$$\mathbb{E}[X]=\int_a^b x\frac{1}{b-a}dx=\frac{b+a}{2}$$
+and 
+$$\mathbb{E}[X^2]=\int_a^b x^2\frac{1}{b-a}=\frac{a^2 +ab+b^2}{3}$$
+and thus $\text{Var}[X]=\frac{(b-a)^2}{12}$. But from the given sample we must have
+$$S^2=\sum_{i=1}^{n}\frac{(X_i - \bar{X})^2}{n-1}=\frac{(b-a)^2}{12}$$
+If $\hat{a}=\hat{b}$, then the LHS is zero, which means that $X_1=\dots=X_n=\bar{X}$. And conversly, if $X_1=\dots=X_n$ then $\bar{X}=X_1$ and thus $S^2=0$, which implies that $\hat{b}=\hat{a}$.
+\\
+\\
+\\
+5. We have that $X_1,\dots,X_n$ are i.i.d samples from a Geom($p$) population. \\
+a) $$L(p;X_1,\dots,X_n)=\prod_{i=1}^{n}f(X_i|p)=\prod_{i=1}^{n}(1-p)^{X_i-1}p=p^n (1-p)^{\sum_{i=1}^{n}X_i-n}$$ 
+\\
+b) $$\ell(p;X_1,\dots,X_n)=n\log{p}+\left(\sum_{i=1}^n X_i -n\right)\log{(1-p)}$$
+Differentiating with respect to $p$ and setting this to , we get
+$$\frac{n}{p}-\frac{1}{1-p}\left(\sum_{i=1}^n X_i -n\right)=0$$
+$$\implies n=p\left(\sum_{i=1}^n X_i\right)\implies p=\frac{1}{\bar{X}}$$
+So the value of $p$ which maximises $\ell(p;X_1,\dots,X_n)$ is $\frac{1}{\bar{X}}$, where $\bar{X}=\frac{1}{n}\sum_{i=1}^n X_i$ is the sample mean.
+
+c) Since $\log{x}$ is a strictly increasing function, it attains its maximum over an interval iff $x$ attains its maximum over that interval. Since $\hat{p}=\frac{1}{\bar{X}}$ maximises $\ell(p,X_1,\dots,X_n)$, it also maximises the likelihood.
+\end{document}

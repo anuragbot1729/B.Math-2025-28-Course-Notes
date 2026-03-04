@@ -1,0 +1,41 @@
+---
+title: "R Scribbles"
+author: "Anurag (bmat2508@isibang.ac.in)"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(viridisLite)
+```
+
+```{r}
+x=rnorm(100)
+mean(x)
+#Can we quantify how far is my estimator from the true value?
+cifn=function(x,alpha=0.95){
+    z=qnorm((1-alpha)/2,lower.tail=FALSE)
+    sdx=sqrt(1/length(x))
+    c(mean(x)-z*sdx,mean(x)+z*sdx)
+}
+i=0
+while(i<10){
+    x=rnorm(100)
+    i=i+1
+    y=cifn(x)
+    print(y)
+}
+#Another way of doing it
+normaldata=replicate(10,rnorm(100),simplify=FALSE)
+cidata=sapply(normaldata,cifn)
+TRUEIN=cidata[1,]*cidata[2,]<0
+table(TRUEIN)
+require(ggplot2)
+df=data.frame(x=1:10,z1=cidata[1,],z2=cidata[2,])
+```
+
+```{r}
+
+
+
+```
